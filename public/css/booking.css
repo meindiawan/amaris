@@ -1,0 +1,42 @@
+/* Form booking, ringkasan biaya & halaman sukses — memakai token warna amaris.css */
+.btn-outline{border-color:var(--line);background:#fff;color:var(--ink)}.btn-outline:hover{border-color:var(--orange);color:var(--orange)}
+.detail-cta{display:flex;flex-wrap:wrap;gap:12px}
+.booking-section{background:#fff;padding:70px 0 90px;border-top:1px solid var(--line)}
+.booking-head{max-width:640px;margin-bottom:34px}.booking-head h2{font:800 clamp(30px,4vw,44px) 'Manrope',sans-serif;margin:10px 0}.booking-head p{color:var(--muted);line-height:1.7;margin:0}
+.booking-layout{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:28px;align-items:start;position:relative}
+.booking-steps{display:grid;gap:18px}
+.bcard{border:1px solid var(--line);border-radius:22px;padding:24px 26px;margin:0;background:var(--cream)}
+.bcard legend{display:flex;align-items:center;gap:10px;font:800 17px 'Manrope',sans-serif;padding:0 8px;margin-left:-8px;float:left;width:100%;margin-bottom:16px}.bcard legend+*{clear:both}
+.bcard legend span{width:28px;height:28px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-size:13px}
+.opt-grid{display:grid;gap:12px}.opt-grid.three{grid-template-columns:repeat(3,1fr)}.opt-grid.two{grid-template-columns:repeat(2,1fr)}
+.opt{position:relative;display:block;cursor:pointer}.opt input{position:absolute;opacity:0;inset:0;width:100%;height:100%;margin:0;cursor:pointer}
+.opt-body{display:flex;flex-direction:column;gap:5px;height:100%;padding:16px 16px 16px 46px;background:#fff;border:1.5px solid var(--line);border-radius:16px;transition:.18s;position:relative}
+.opt-body::before{content:"";position:absolute;left:16px;top:18px;width:18px;height:18px;border-radius:50%;border:2px solid #cfc6bb;background:#fff;transition:.18s}
+.opt-body b{font-size:14px}.opt-body small{color:var(--muted);font-size:12px;line-height:1.5}.opt-body i{font-style:normal;font-size:12px;font-weight:800;color:var(--orange);margin-top:auto;padding-top:4px}
+.opt:hover .opt-body{border-color:#f0c28f}.opt input:checked+.opt-body{border-color:var(--orange);background:#fff8ef;box-shadow:0 8px 22px rgba(242,123,22,.12)}
+.opt input:checked+.opt-body::before{border-color:var(--orange);background:radial-gradient(circle,var(--orange) 0 45%,#fff 50%)}
+.opt input:focus-visible+.opt-body{outline:3px solid rgba(242,123,22,.35)}
+.sub{margin:18px 0 10px;font-weight:800;font-size:13px;color:var(--ink2)}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.fgrid .full,label.full{grid-column:1/-1}
+.bcard label{display:grid;gap:7px;font-weight:700;font-size:13px;color:var(--ink)}.bcard label em{font-style:normal;font-weight:500;color:var(--muted)}
+.bcard input[type=text],.bcard input[type=date],.bcard input[type=time],.bcard input[type=tel],.bcard input[type=email],.bcard input[type=number],.bcard input:not([type]),.bcard textarea{width:100%;padding:13px 14px;border:1.5px solid var(--line);border-radius:12px;background:#fff;font:500 14px 'DM Sans',sans-serif;color:var(--ink);transition:.15s}
+.bcard input:focus,.bcard textarea:focus{outline:0;border-color:var(--orange);box-shadow:0 0 0 4px rgba(242,123,22,.12)}.bcard textarea{resize:vertical;min-height:70px}
+label.addr{margin-top:12px}[hidden]{display:none!important}
+.hint{font-size:12px;color:var(--muted);margin:12px 0 0}.hint.warn{color:#b3361f;font-weight:700}
+.booked-list{margin-top:12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}.booked-list small{color:var(--muted);font-size:12px}.booked-list span{background:#fdeceb;color:#a3392c;border-radius:99px;padding:5px 11px;font-size:12px;font-weight:700}
+.bcard .agree{display:flex;gap:11px;align-items:flex-start;margin-top:20px;font-weight:500;font-size:13px;line-height:1.55;cursor:pointer}.agree input{width:18px;height:18px;margin-top:2px;accent-color:var(--orange);flex:none}.agree em{display:block;color:var(--muted);font-size:12px;margin-top:5px}
+.booking-summary{position:sticky;top:100px}.sum-card{background:var(--ink);color:#fff;border-radius:24px;padding:22px;box-shadow:0 24px 50px rgba(33,23,53,.22)}
+.sum-card img{width:100%;height:160px;object-fit:cover;border-radius:16px;margin-bottom:14px}.sum-card h3{font:800 20px 'Manrope',sans-serif;margin:0}.sum-sub{display:block;color:#bdb4c8;margin:4px 0 14px;font-size:12px}
+.srow{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-top:1px solid rgba(255,255,255,.12);font-size:13px}.srow span{color:#d3cbdc}.srow b{text-align:right}
+.stotal{display:flex;flex-direction:column;gap:4px;padding:16px 0 18px;border-top:1px solid rgba(255,255,255,.2)}.stotal span{font-size:12px;color:#d3cbdc}.stotal strong{font:800 28px 'Manrope',sans-serif;color:var(--orange2)}
+.sum-card .btn{width:100%;font-size:13px;padding:15px}.sum-card .btn:disabled{opacity:.55;cursor:not-allowed}.sum-note{display:block;color:#bdb4c8;font-size:11px;line-height:1.55;margin-top:12px}
+.form-alert{background:#fff0ee;border:1px solid #f3c4bd;color:#8f2d22;border-radius:16px;padding:16px 20px;margin-bottom:22px;font-size:14px}.form-alert ul{margin:8px 0 0 18px;padding:0}.form-alert.info{background:#fff8ef;border-color:#f5d6a8;color:#7a4b0a}.form-alert a{color:inherit;font-weight:800}
+.detail-foot{background:#fff;border-top:1px solid var(--line);padding:18px 0;color:#a09aa3;font-size:11px}.detail-foot .container{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.success-card{max-width:720px;margin:20px auto 0;background:#fff;border:1px solid var(--line);border-radius:28px;padding:44px 38px;text-align:center;box-shadow:0 24px 60px rgba(33,23,53,.07)}
+.success-icon{width:68px;height:68px;border-radius:50%;background:#e7f7ee;color:var(--green);font-size:34px;display:grid;place-items:center;margin:0 auto 18px;font-weight:800}
+.success-card h1{font:800 clamp(26px,4vw,36px) 'Manrope',sans-serif;margin:10px 0}.success-card>p{color:var(--muted);line-height:1.7}
+.code-box{margin:24px auto;background:var(--cream);border:1.5px dashed #e2b784;border-radius:18px;padding:16px 22px;display:inline-block;min-width:240px}.code-box small{display:block;color:var(--muted);font-size:12px}.code-box strong{font:800 28px 'Manrope',sans-serif;letter-spacing:.06em;color:var(--orange)}
+.sum-list{display:grid;grid-template-columns:1fr 1fr;gap:14px 22px;text-align:left;margin:10px 0;padding:22px;background:var(--cream);border-radius:18px}.sum-list dt{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);font-weight:700}.sum-list dd{margin:4px 0 0;font-weight:600;font-size:14px;overflow-wrap:anywhere}
+.success-card .hint{margin:14px 0 24px}
+@media(max-width:980px){.booking-layout{grid-template-columns:1fr}.booking-summary{position:static}.opt-grid.three{grid-template-columns:1fr}}
+@media(max-width:640px){.booking-section{padding:46px 0 60px}.bcard{padding:20px 16px}.fgrid,.opt-grid.two,.sum-list{grid-template-columns:1fr}.success-card{padding:32px 20px}.detail-cta .btn{flex:1 1 100%}}

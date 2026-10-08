@@ -1,0 +1,32 @@
+PEMULIHAN DATA AMARIS SQLITE KE MYSQL XAMPP
+
+PENTING:
+- Jangan hapus database/database.sqlite; ini sumber data lama.
+- Jangan menjalankan php artisan migrate:fresh.
+- Perintah impor tidak menimpa baris MySQL yang sudah ada dengan ID yang sama.
+- Foto mobil di database lama direferensikan dengan URL internet, bukan file lokal. Jika foto online tidak tersedia, file gambar asli perlu dicari dari backup lama atau diunggah ulang.
+
+1. Backup database MySQL amaris lewat phpMyAdmin > Export.
+2. Pastikan .env berisi:
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=amaris
+   DB_USERNAME=root
+   DB_PASSWORD=
+   CACHE_STORE=file
+   SESSION_DRIVER=file
+3. Pastikan database amaris sudah dibuat di phpMyAdmin.
+4. Jalankan di folder proyek:
+   php artisan config:clear
+   php artisan migrate
+5. Cek dulu data yang bisa diimpor tanpa perubahan:
+   php artisan amaris:import-sqlite --dry-run
+6. Jika ringkasan masuk akal, jalankan impor:
+   php artisan amaris:import-sqlite
+7. Bersihkan cache dan mulai aplikasi:
+   php artisan optimize:clear
+   php artisan storage:link
+   php artisan serve
+
+Data yang sudah ada di MySQL tidak dihapus. Baris yang memiliki ID sama akan dilewati agar data terbaru tidak ditimpa.

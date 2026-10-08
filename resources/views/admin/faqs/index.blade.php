@@ -1,0 +1,5 @@
+@extends('admin.layout')
+@section('content')
+<div class="page-head"><div><span>INFORMASI PENGUNJUNG</span><h2>FAQ</h2><p>Pertanyaan umum yang tampil di halaman katalog.</p></div><a class="btn" href="{{ route('admin.faqs.create') }}">+ Tambah FAQ</a></div>
+<div class="table-card"><table><thead><tr><th>Urutan</th><th>Pertanyaan</th><th>Jawaban</th><th>Status</th><th>Aksi</th></tr></thead><tbody>@forelse($faqs as $faq)<tr><td>{{ $faq->sort_order }}</td><td><b>{{ $faq->question }}</b></td><td><small>{{ \Illuminate\Support\Str::limit($faq->answer,100) }}</small></td><td><span class="status {{ $faq->is_active?'on':'off' }}">{{ $faq->is_active?'Aktif':'Nonaktif' }}</span></td><td><div class="actions"><a href="{{ route('admin.faqs.edit',$faq) }}">Edit</a><form method="POST" action="{{ route('admin.faqs.destroy',$faq) }}" onsubmit="return confirm('Hapus FAQ ini?')">@csrf @method('DELETE')<button>Hapus</button></form></div></td></tr>@empty<tr><td colspan="5">Belum ada FAQ.</td></tr>@endforelse</tbody></table></div>
+@endsection

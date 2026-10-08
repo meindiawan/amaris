@@ -1,0 +1,10 @@
+@extends('admin.layout') @section('content')
+<div class="page-head"><div><span>KEUANGAN</span><h2>Pembayaran</h2><p>Semua DP, cicilan, dan pelunasan dari pelanggan.</p></div><a class="btn" href="{{ route('admin.payments.create') }}">+ Catat Pembayaran</a></div>
+<div class="totals"><div><small>Total penerimaan (sesuai filter, tanpa deposit)</small><b>Rp {{ number_format($total,0,',','.') }}</b></div></div>
+<form class="search-box" style="margin-bottom:14px;flex-wrap:wrap" method="GET"><input name="q" value="{{ request('q') }}" placeholder="Kode / nama pelanggan"><input type="date" name="from" value="{{ request('from') }}"><input type="date" name="to" value="{{ request('to') }}"><button class="btn">Filter</button></form>
+<div class="table-card"><table><thead><tr><th>Tanggal</th><th>Booking</th><th>Jenis</th><th>Metode</th><th>Jumlah</th><th>Bukti</th><th></th></tr></thead><tbody>
+@forelse($payments as $p)<tr><td>{{ $p->paid_at->format('d M Y H:i') }}<small>{{ $p->received_by }}</small></td><td><a href="{{ route('admin.bookings.show',$p->booking_id) }}"><b>{{ $p->booking->code ?? '-' }}</b></a><small>{{ $p->booking->customer_name ?? '' }}</small></td><td>{{ $p->type_label }}</td><td>{{ $p->method_label }}<small>{{ $p->reference }}</small></td><td><b>Rp {{ number_format($p->amount,0,',','.') }}</b></td><td>@if($p->proof)<a href="{{ $p->proof }}" target="_blank">Lihat ↗</a>@endif</td>
+<td class="actions"><form method="POST" action="{{ route('admin.payments.destroy',$p) }}" onsubmit="return confirm('Hapus pembayaran ini?')">@csrf @method('DELETE')<button>Hapus</button></form></td></tr>
+@empty<tr><td colspan="7" class="empty">Belum ada pembayaran.</td></tr>@endforelse</tbody></table></div>
+@if($payments->hasPages())<div class="pager"><span>Halaman {{ $payments->currentPage() }} / {{ $payments->lastPage() }}</span>@if($payments->previousPageUrl())<a class="btn secondary" href="{{ $payments->previousPageUrl() }}">← Sebelumnya</a>@endif @if($payments->nextPageUrl())<a class="btn secondary" href="{{ $payments->nextPageUrl() }}">Berikutnya →</a>@endif</div>@endif
+@endsection

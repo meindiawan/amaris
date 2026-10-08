@@ -1,0 +1,13 @@
+@php $rp = fn($n)=>'Rp '.number_format($n,0,',','.'); $inv = $booking->invoice; @endphp
+<div class="form-card price-card"><h3>Pembayaran</h3>
+<div class="row"><span>Tagihan{{ $inv?' (invoice)':' (estimasi)' }}</span><b>{{ $rp($booking->bill_total) }}</b></div>
+<div class="row"><span>Sudah dibayar</span><b>{{ $rp($booking->paid_total) }}</b></div>
+<div class="row total"><span>Sisa <span class="status pay-{{ $booking->payment_status }}">{{ $booking->payment_status_label }}</span></span><b>{{ $rp($booking->balance_due) }}</b></div>
+@if($booking->deposit_total)<div class="row"><span>Deposit jaminan dipegang</span><b>{{ $rp($booking->deposit_total) }}</b></div>@endif
+<table class="mini-table"><tbody>@foreach($booking->payments as $p)<tr><td>{{ $p->paid_at->format('d M') }}<br><small>{{ $p->type_label }} · {{ $p->method_label }}</small></td><td style="text-align:right"><b>{{ $rp($p->amount) }}</b></td><td><form method="POST" action="{{ route('admin.payments.destroy',$p) }}" onsubmit="return confirm('Hapus pembayaran ini?')">@csrf @method('DELETE')<button class="link-danger" style="width:auto">✕</button></form></td></tr>@endforeach</tbody></table>
+<form method="POST" action="{{ route('admin.payments.store') }}" enctype="multipart/form-data">@csrf<input type="hidden" name="booking_id" value="{{ $booking->id }}">
+<div class="inline-form"><label>Jenis<select name="type">@foreach(\App\Models\Payment::TYPES as $k=>$l)<option value="{{ $k }}">{{ $l }}</option>@endforeach</select></label><label>Jumlah (Rp)<input type="number" name="amount" min="1" required></label><label>Metode<select name="method">@foreach(\App\Models\Payment::METHODS as $k=>$l)<option value="{{ $k }}">{{ $l }}</option>@endforeach</select></label><label>Tanggal<input type="datetime-local" name="paid_at" value="{{ now()->format('Y-m-d\TH:i') }}" required></label><label class="full">Catatan<input name="reference"></label></div>
+<button class="btn" style="margin-top:12px;width:100%">+ Catat Pembayaran</button></form></div>
+<div class="form-card"><h3>Invoice</h3>
+@if($inv)<p><b>{{ $inv->number }}</b><br><span class="status pay-{{ $inv->status }}">{{ $inv->status_label }}</span> · {{ $inv->is_published?'terlihat pelanggan':'belum dikirim' }}</p><a class="btn" style="width:100%;text-align:center" href="{{ route('admin.invoices.show',$inv) }}">Buka Invoice →</a>
+@else<p style="color:var(--muted)">Invoice dibuat otomatis dari data booking, unit, dan supir. Setelah itu bisa ditambah BBM, tol, overtime, dll.</p><form method="POST" action="{{ route('admin.bookings.invoice',$booking) }}">@csrf<button class="btn" style="width:100%">Buat Invoice Otomatis →</button></form>@endif</div>

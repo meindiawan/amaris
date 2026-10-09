@@ -18,6 +18,16 @@
     RewriteCond %{REQUEST_URI} (.+)/$
     RewriteRule ^ %1 [L,R=301]
 
+    # --- Keamanan: blokir file/folder internal Laravel agar tidak bisa diakses lewat URL ---
+    RewriteRule ^\.(?!well-known) - [F,L]
+    RewriteRule ^(app|bootstrap|config|database|lib|resources|routes|storage|tests|vendor)(/|$) - [F,L]
+    RewriteRule ^(artisan|composer\.(json|lock)|package(-lock)?\.json|phpunit\.xml|vite\.config\.js|README\.md|AMARIS-[^/]*\.md|PANDUAN-[^/]*\.txt)$ - [F,L]
+
+    # --- Sajikan file statis (css, js, images, uploads) dari folder public/ ---
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteCond %{DOCUMENT_ROOT}/public%{REQUEST_URI} -f
+    RewriteRule ^(.*)$ public/$1 [L]
+
     # Send Requests To Front Controller...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f

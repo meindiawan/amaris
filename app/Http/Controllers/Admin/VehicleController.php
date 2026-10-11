@@ -68,14 +68,17 @@ class VehicleController extends Controller
             'chassis_number' => 'nullable|max:40', 'engine_number' => 'nullable|max:40',
             'stnk_number' => 'nullable|max:40', 'stnk_owner' => 'nullable|max:120',
             'stnk_expiry' => 'nullable|date', 'tax_expiry' => 'nullable|date',
-            'owner_type' => 'required|in:own,partner', 'owner_name' => 'nullable|max:120', 'owner_phone' => 'nullable|max:30',
+            'owner_type' => 'nullable|in:own,partner', 'owner_name' => 'nullable|max:120', 'owner_phone' => 'nullable|max:30',
             'setoran_per_day' => 'nullable|integer|min:0', 'odometer' => 'nullable|integer|min:0',
             'notes' => 'nullable|max:2000', 'stnk_file' => 'nullable|file|mimes:jpg,jpeg,png,webp,pdf|max:6144',
+            'fuel_barcode_file' => 'nullable|file|mimes:jpg,jpeg,png,webp,pdf|max:6144',
         ], ['plate_number.required' => 'Plat nomor wajib diisi.', 'plate_number.unique' => 'Plat nomor ini sudah terdaftar.']);
         $d['setoran_per_day'] = (int) ($d['setoran_per_day'] ?? 0);
-        $d['is_active'] = $r->boolean('is_active');
-        unset($d['stnk_file']);
+        $d['owner_type'] = $d['owner_type'] ?? 'own';
+        $d['is_active'] = $r->has('is_active') ? $r->boolean('is_active') : true;
+        unset($d['stnk_file'], $d['fuel_barcode_file']);
         if ($r->hasFile('stnk_file')) $d['stnk_file'] = Fmt::saveUpload($r->file('stnk_file'), 'stnk');
+        if ($r->hasFile('fuel_barcode_file')) $d['fuel_barcode_file'] = Fmt::saveUpload($r->file('fuel_barcode_file'), 'fuel-barcode');
         return $d;
     }
 }

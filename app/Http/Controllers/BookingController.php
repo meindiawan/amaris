@@ -91,7 +91,10 @@ class BookingController extends Controller
             'total_estimate' => $total, 'status' => 'pending',
         ]);
 
-        return redirect()->route('booking.success', $booking->code);
+        
+        $wa = '6285157024883';
+        $message = "Halo Amaris Rentcar, saya ingin booking mobil.\nKode: {$booking->code}\nMobil: {$booking->car_name}\nPaket: {$booking->service_label}\nAmbil: ".$booking->start_at->format('d-m-Y H:i')."\nKembali: ".$booking->end_at->format('d-m-Y H:i')."\nNama: {$booking->customer_name}\nNo. WA: {$booking->phone}\nTujuan: ".($booking->destination ?: '-')."\nMohon konfirmasi booking saya. Terima kasih.";
+        return redirect()->away('https://wa.me/'.$wa.'?text='.rawurlencode($message));
     }
 
     public function success(string $code)

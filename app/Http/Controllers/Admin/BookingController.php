@@ -53,6 +53,11 @@ class BookingController extends Controller
             'order_name' => 'nullable|max:150', 'pelayanan' => 'nullable|max:150', 'giat' => 'nullable|max:150',
             'standby_location' => 'nullable|max:200', 'standby_time' => 'nullable|max:30', 'destination' => 'nullable|max:200',
             'guest_name' => 'nullable|max:120', 'guest_phone' => 'nullable|max:30',
+            'invoice_status' => 'required|in:belum dibuat,sudah dibuat,sudah terkirim',
+            'payment_state' => 'required|in:belum payment,sudah payment',
+            'payment_received_by' => 'nullable|max:120', 'payment_note' => 'nullable|string|max:1000',
+            'rental_name' => 'nullable|max:150', 'booking_order_title' => 'nullable|max:150',
+            'booking_service' => 'nullable|max:150', 'operation_notes' => 'nullable|string|max:2000',
         ]);
         $active = in_array($booking->status, Booking::BLOCKING) || $booking->status === 'pending';
         if ($active && !empty($d['vehicle_id']) && Booking::vehicleConflicts((int) $d['vehicle_id'], $booking->start_at, $booking->end_at, $booking->id)->exists()) {

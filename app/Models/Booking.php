@@ -136,7 +136,7 @@ class Booking extends Model
         $standby = $this->standby_location ?: ($this->pickup_method === 'delivery' ? $this->pickup_address : \App\Support\Fmt::setting('address', ''));
 
         return implode("\n", [
-            'Booking order : '.($this->order_name ?: $this->customer_name),
+            'Booking order : '.($this->booking_order_title ?: $this->order_name ?: $this->customer_name),
             '',
             $this->orderDateLabel(),
             '',
@@ -145,7 +145,7 @@ class Booking extends Model
             'Driver : '.$drv,
             'No hp : '.$drvTel,
             '',
-            'Pelayanan : '.($this->pelayanan ?: ''),
+            'Pelayanan : '.($this->booking_service ?: $this->pelayanan ?: ''),
             'Giat : '.($this->giat ?: ''),
             '',
             'Standby di : '.$standby,
@@ -161,6 +161,7 @@ class Booking extends Model
             'PUSATnya rental mobil terpercaya seluruh indonesia',
             '',
             $url,
+            '------------------------------',
         ]);
     }
 }

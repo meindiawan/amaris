@@ -29,11 +29,12 @@ class DriverController extends Controller
             'name' => 'required|max:120', 'phone' => 'required|max:30', 'emergency_phone' => 'nullable|max:30',
             'address' => 'nullable|max:500', 'nik' => 'nullable|max:20', 'sim_number' => 'nullable|max:40',
             'sim_type' => 'nullable|max:20', 'sim_expiry' => 'nullable|date', 'notes' => 'nullable|max:2000',
-            'photo' => 'nullable|image|max:4096',
+            'photo' => 'nullable|image|max:4096', 'sim_photo' => 'nullable|image|max:4096',
         ], ['name.required' => 'Nama supir wajib diisi.', 'phone.required' => 'No. HP supir wajib diisi.']);
-        $d['is_active'] = $r->boolean('is_active');
-        unset($d['photo']);
+        $d['is_active'] = $r->has('is_active') ? $r->boolean('is_active') : true;
+        unset($d['photo'], $d['sim_photo']);
         if ($r->hasFile('photo')) $d['photo'] = Fmt::saveUpload($r->file('photo'), 'drivers');
+        if ($r->hasFile('sim_photo')) $d['sim_photo'] = Fmt::saveUpload($r->file('sim_photo'), 'sim');
         return $d;
     }
 }

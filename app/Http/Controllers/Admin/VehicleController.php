@@ -14,7 +14,7 @@ class VehicleController extends Controller
         $q = trim((string) $r->query('q'));
         $f = $r->query('f');
         $vehicles = Vehicle::with('car')
-            ->when($q !== '', fn ($x) => $x->where(fn ($w) => $w->where('plate_number', 'like', "%$q%")->orWhere('display_name', 'like', "%$q%")->orWhere('barcode', 'like', "%$q%")->orWhere('owner_name', 'like', "%$q%")))
+            ->when($q !== '', fn ($x) => $x->where(fn ($w) => $w->where('plate_number', 'like', "%$q%")->orWhere('display_name', 'like', "%$q%")->orWhere('barcode', 'like', "%$q%")))
             ->when($f === 'out', fn ($x) => $x->where('is_out', true))
             ->when($f === 'in', fn ($x) => $x->where('is_out', false)->where('is_active', true))
             ->when($f === 'off', fn ($x) => $x->where('is_active', false))
@@ -22,7 +22,7 @@ class VehicleController extends Controller
         return view('admin.vehicles.index', compact('vehicles', 'q', 'f'));
     }
 
-    public function create() { return view('admin.vehicles.form', ['vehicle' => new Vehicle(['is_active' => true, 'owner_type' => 'own']), 'cars' => Car::orderBy('name')->get()]); }
+    public function create() { return view('admin.vehicles.form', ['vehicle' => new Vehicle(['is_active' => true]), 'cars' => Car::orderBy('name')->get()]); }
 
     public function store(Request $r)
     {
@@ -34,10 +34,9 @@ class VehicleController extends Controller
     public function show(Vehicle $vehicle)
     {
         $vehicle->load('car');
-        $moves = $vehicle->movements()->with(['driver', 'booking'])->take(15)->get();
+        $logs = \App\Models\VehicleLog::where('vehicle_id', $vehicle->id)->orderByDesc('out_date')->orderByDesc('id')->take(15)->get();
         $bookings = $vehicle->bookings()->latest('start_at')->take(10)->get();
-        $setoranTotal = $vehicle->setorans()->sum('amount');
-        return view('admin.vehicles.show', compact('vehicle', 'moves', 'bookings', 'setoranTotal'));
+        return view('admin.vehicles.show', compact('vehicle', 'logs', 'bookings'));
     }
 
     public function edit(Vehicle $vehicle) { return view('admin.vehicles.form', ['vehicle' => $vehicle, 'cars' => Car::orderBy('name')->get()]); }
@@ -57,25 +56,28 @@ class VehicleController extends Controller
     public function label(Vehicle $vehicle) { return view('admin.vehicles.label', ['vehicles' => collect([$vehicle])]); }
     public function labels() { return view('admin.vehicles.label', ['vehicles' => Vehicle::where('is_active', true)->orderBy('plate_number')->get()]); }
 
+    /** Form armada hanya: nopol, jenis mobil, file STNK, file barcode BBM. */
     private function data(Request $r, ?Vehicle $v = null): array
     {
-        $plate = Vehicle::normalizePlate($r->input('plate_number'));
-        $r->merge(['plate_number' => $plate]);
+        $r->merge(['plate_number' => Vehicle::normalizePlate($r->input('plate_number'))]);
         $d = $r->validate([
             'plate_number' => 'required|max:20|unique:vehicles,plate_number'.($v ? ','.$v->id : ''),
-            'car_id' => 'nullable|exists:cars,id', 'display_name' => 'nullable|max:120',
-            'year' => 'nullable|integer|min:1980|max:2100', 'color' => 'nullable|max:40',
-            'chassis_number' => 'nullable|max:40', 'engine_number' => 'nullable|max:40',
-            'stnk_number' => 'nullable|max:40', 'stnk_owner' => 'nullable|max:120',
-            'stnk_expiry' => 'nullable|date', 'tax_expiry' => 'nullable|date',
-            'owner_type' => 'required|in:own,partner', 'owner_name' => 'nullable|max:120', 'owner_phone' => 'nullable|max:30',
-            'setoran_per_day' => 'nullable|integer|min:0', 'odometer' => 'nullable|integer|min:0',
-            'notes' => 'nullable|max:2000', 'stnk_file' => 'nullable|file|mimes:jpg,jpeg,png,webp,pdf|max:6144',
-        ], ['plate_number.required' => 'Plat nomor wajib diisi.', 'plate_number.unique' => 'Plat nomor ini sudah terdaftar.']);
-        $d['setoran_per_day'] = (int) ($d['setoran_per_day'] ?? 0);
+            'display_name' => 'required|max:120',
+            'stnk_file' => 'nullable|file|mimes:jpg,jpeg,png,webp,pdf|max:6144',
+            'barcode_image' => 'nullable|file|mimes:jpg,jpeg,png,webp,pdf|max:6144',
+        ], [
+            'plate_number.required' => 'Nopol wajib diisi.', 'plate_number.unique' => 'Nopol ini sudah terdaftar.',
+            'display_name.required' => 'Jenis mobil wajib diisi.',
+            'stnk_file.mimes' => 'File STNK harus berupa JPG, PNG, WEBP atau PDF.', 'barcode_image.mimes' => 'File barcode BBM harus berupa JPG, PNG, WEBP atau PDF.',
+        ]);
+        unset($d['stnk_file'], $d['barcode_image']);
         $d['is_active'] = $r->boolean('is_active');
-        unset($d['stnk_file']);
+        // Hubungkan otomatis ke katalog website bila nama jenis mobil cocok (untuk penugasan booking).
+        $name = mb_strtolower(trim($d['display_name']));
+        $car = Car::all()->first(fn ($c) => ($cn = mb_strtolower($c->name)) === $name || str_contains($cn, $name) || str_contains($name, $cn));
+        $d['car_id'] = $car?->id;
         if ($r->hasFile('stnk_file')) $d['stnk_file'] = Fmt::saveUpload($r->file('stnk_file'), 'stnk');
+        if ($r->hasFile('barcode_image')) $d['barcode_image'] = Fmt::saveUpload($r->file('barcode_image'), 'barcode-bbm');
         return $d;
     }
 }

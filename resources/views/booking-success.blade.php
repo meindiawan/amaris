@@ -1,6 +1,6 @@
 @php
  $rp = fn($n) => 'Rp '.number_format($n,0,',','.');
- $wa = $settings['whatsapp'] ?? '6281234567890';
+ $wa = $settings['whatsapp'] ?? '6285157024883';
  $msg = "Halo Amaris Ren Car, saya sudah booking online.\nKode: {$booking->code}\nMobil: {$booking->car_name}\nPaket: {$booking->service_label}\nAmbil: ".$booking->start_at->format('d M Y H:i')."\nKembali: ".$booking->end_at->format('d M Y H:i')." ({$booking->days} hari)\nNama: {$booking->customer_name}\nMohon konfirmasinya. Terima kasih.";
 @endphp
 <!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Booking Diterima — Amaris Ren Car</title><link rel="icon" href="{{ asset('images/logo-amaris.png') }}"><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="{{ asset('css/amaris.css') }}"><link rel="stylesheet" href="{{ asset('css/booking.css') }}"></head><body>

@@ -48,3 +48,26 @@ label.stack{display:grid;gap:7px;font-weight:700;font-size:13px;margin:14px 0}la
 .edit-items{min-width:900px}.edit-items textarea,.edit-items input,.edit-items select{width:100%;padding:8px;border:1px solid #ded4c8;border-radius:8px;font:inherit;font-size:12px}.edit-items textarea{min-height:64px}
 .edit-items td{vertical-align:top;padding:8px 5px}
 @media print{.sidebar,.admin-top,.page-head,.no-print{display:none!important}.admin-main{margin:0}.admin-content{padding:0}}
+
+/* ===== Revisi Okt 2026: daftar booking order, log keluar/masuk, file chip ===== */
+[hidden]{display:none!important}
+.scroll-x{overflow-x:auto}
+.file-chip{display:inline-block;padding:5px 11px;border-radius:99px;background:#f3ece2;color:var(--ink);font-size:12px;font-weight:700;text-decoration:none;white-space:nowrap}.file-chip:hover{background:#ead9c2}
+.order-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:18px;margin-bottom:20px}
+.order-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;display:flex;flex-direction:column;gap:6px}
+.order-card header{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.order-card header b{font:800 16px Manrope,sans-serif;display:block}.order-card header small{color:var(--muted);font-size:12px}
+.order-card .order-text{flex:1;max-height:420px;overflow:auto;margin:6px 0}
+.order-actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.order-actions .btn{padding:9px 14px;font-size:13px}
+.need-assign{background:#fff3df;color:#a8650c;border-radius:10px;padding:8px 12px;font-size:12.5px;font-weight:600}
+.avail-note{color:var(--muted);font-size:12px;margin:0}
+.log-table td,.log-table th{vertical-align:top}.log-table .note-cell{max-width:220px;white-space:pre-wrap}
+.qf{display:flex;flex-direction:column;gap:4px;margin:0}.qf small{color:var(--muted);font-size:11px}
+.qf input[type=date]{padding:5px 7px;border:1px solid #ded4c8;border-radius:8px;font:inherit;font-size:12px}
+.mini-btn{padding:5px 9px;border:0;border-radius:8px;background:#ed7918;color:#fff;font:700 11px 'DM Sans',sans-serif;cursor:pointer}
+.sel{padding:6px 8px;border-radius:9px;border:1px solid #ded4c8;font:700 12px 'DM Sans',sans-serif;cursor:pointer;background:#fff}
+.sel.inv-belum_dibuat,.sel.pay-belum{background:#fdeceb;color:#b3372d;border-color:#f3c9c5}
+.sel.inv-sudah_dibuat{background:#fff3df;color:#a8650c;border-color:#f1d9ab}
+.sel.inv-sudah_terkirim,.sel.pay-sudah{background:#e9f7ed;color:#26743e;border-color:#bfe3c9}
+.other-box{background:#faf5ec;border:1px dashed #d9ccb9;border-radius:14px;padding:14px}
+.log-table{min-width:1180px}.log-table .plate{white-space:nowrap}.log-table td{font-size:13px}

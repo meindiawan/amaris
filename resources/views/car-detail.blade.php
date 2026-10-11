@@ -1,6 +1,6 @@
 @php
  $rp = fn($n) => 'Rp '.number_format($n,0,',','.');
- $wa = $settings['whatsapp'] ?? '6281234567890';
+ $wa = $settings['whatsapp'] ?? '6285157024883';
  $driverFee = (int)($settings['driver_fee'] ?? 150000); $allinFee = (int)($settings['allin_fee'] ?? 350000); $deliveryFee = (int)($settings['delivery_fee'] ?? 0);
  $office = $settings['address'] ?? 'Kantor Amaris Ren Car';
  $service = old('service_type','self_drive'); $pm = old('pickup_method','office'); $rm = old('return_method','office');
@@ -8,7 +8,7 @@
 <!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{{ $car->name }} — Amaris Ren Car</title><link rel="icon" href="{{ asset('images/logo-amaris.png') }}"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="{{ asset('css/amaris.css') }}"><link rel="stylesheet" href="{{ asset('css/booking.css') }}"></head><body><header class="navbar"><div class="container nav-inner"><a class="brand" href="/"><img src="{{ asset('images/logo-amaris.png') }}"></a><nav class="nav-links"><a href="/#armada">Armada</a><a class="nav-cta" href="#booking">Booking Sekarang ↗</a></nav></div></header><main class="car-detail-page"><div class="container"><a class="back-link" href="/#armada">← Kembali ke armada</a><div class="detail-grid"><div class="detail-image"><img src="{{ $car->image }}" alt="{{ $car->name }}"></div><div class="detail-copy"><span class="eyebrow dark">AMARIS FLEET</span><h1>{{ $car->name }}</h1><p class="detail-desc">{{ $car->description ?: 'Mobil siap digunakan untuk perjalanan keluarga, bisnis, maupun kebutuhan harian.' }}</p><div class="specs"><div><small>Tipe</small><b>{{ $car->type }}</b></div><div><small>Transmisi</small><b>{{ $car->transmission }}</b></div><div><small>Kapasitas</small><b>{{ $car->seats }} orang</b></div><div><small>Status</small><b>{{ $car->is_available?'Tersedia':'Tidak tersedia' }}</b></div></div><div class="detail-price"><small>Mulai dari</small><strong>Rp {{ number_format($car->price,0,',','.') }} <i>/ hari</i></strong></div><div class="detail-cta">@if($car->is_available)<a class="btn btn-primary" href="#booking">Booking Sekarang ↓</a>@endif<a class="btn btn-outline" href="https://wa.me/{{ $wa }}?text={{ urlencode('Halo Amaris Ren Car, saya ingin bertanya tentang '.$car->name.'.') }}" target="_blank" rel="noopener">Tanya via WhatsApp ↗</a></div></div></div></div>
 
 <section class="booking-section" id="booking"><div class="container">
- <div class="booking-head"><span class="eyebrow dark">BOOKING ONLINE</span><h2>Booking {{ $car->name }}</h2><p>Isi formulir di bawah. Admin akan menghubungi Anda via WhatsApp untuk konfirmasi ketersediaan dan pembayaran.</p></div>
+ <div class="booking-head"><span class="eyebrow dark">BOOKING ONLINE</span><h2>Booking {{ $car->name }}</h2><p>Isi formulir di bawah. Setelah dikirim, Anda otomatis diarahkan ke WhatsApp admin untuk konfirmasi ketersediaan dan pembayaran.</p></div>
 
  @if($errors->any())<div class="form-alert" id="formAlert"><b>Mohon periksa kembali isian Anda:</b><ul>@foreach($errors->all() as $e)<li>{{ $e }}</li>@endforeach</ul></div>@endif
 
@@ -77,7 +77,7 @@
    <div class="srow"><span id="sumSvcLabel">Paket</span><b id="sumSvc">—</b></div>
    <div class="srow" id="sumDelivRow" hidden><span>Antar / jemput</span><b id="sumDeliv"></b></div>
    <div class="stotal"><span>Estimasi total</span><strong id="sumTotal">{{ $rp($car->price) }}</strong></div>
-   <button class="btn btn-primary" type="submit" id="submitBtn">Kirim Booking →</button>
+   <button class="btn btn-primary" type="submit" id="submitBtn">Booking via WhatsApp →</button>
    <small class="sum-note">Ini hanya estimasi. Biaya final (deposit, kelebihan jam, BBM, tol, dll) dikonfirmasi admin sebelum serah terima.</small>
   </div></aside>
  </form>

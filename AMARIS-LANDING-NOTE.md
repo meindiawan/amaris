@@ -19,7 +19,7 @@ Lalu buka `http://127.0.0.1:8000`.
 Jika memakai Vite/npm, halaman ini tidak bergantung pada build Vite untuk CSS/JS landing page.
 
 ## Penting
-Nomor WhatsApp demo di landing page adalah `6281234567890`. Ganti dengan nomor admin sebenarnya di:
+Nomor WhatsApp demo di landing page adalah `6285157024883`. Ganti dengan nomor admin sebenarnya di:
 - `routes/web.php` pada link WA katalog.
 - `resources/views/welcome.blade.php` pada footer dan tombol WA.
 

@@ -91,7 +91,34 @@ class BookingController extends Controller
             'total_estimate' => $total, 'status' => 'pending',
         ]);
 
-        return redirect()->route('booking.success', $booking->code);
+        // Booking hanya lewat WhatsApp: data tersimpan di sistem, lalu pelanggan langsung diarahkan ke WA admin.
+        return redirect()->away($this->whatsappUrl($booking, $car, $d));
+    }
+
+    /** Tautan wa.me ke admin dengan pesan booking yang sudah terisi. */
+    private function whatsappUrl(Booking $b, Car $car, array $d): string
+    {
+        $rp = fn ($n) => 'Rp '.number_format($n, 0, ',', '.');
+        $lines = [
+            'Halo Amaris Rent Car, saya ingin booking mobil:',
+            '',
+            'Kode booking : '.$b->code,
+            'Mobil : '.$car->name,
+            'Paket : '.$b->service_label,
+            'Ambil : '.$b->start_at->translatedFormat('d M Y').' jam '.$b->start_at->format('H:i'),
+            'Kembali : '.$b->end_at->translatedFormat('d M Y').' jam '.$b->end_at->format('H:i').' ('.$b->days.' hari)',
+            'Serah terima : '.$b->pickup_label,
+            'Pengembalian : '.$b->return_label,
+        ];
+        if (!empty($d['destination'])) $lines[] = 'Tujuan : '.$d['destination'];
+        if (!empty($d['passengers'])) $lines[] = 'Penumpang : '.$d['passengers'].' orang';
+        array_push($lines, '', 'Nama : '.$b->customer_name, 'No. WA : '.$b->phone, 'NIK : '.$b->nik, 'Alamat : '.$b->address);
+        if ($b->sim_number) $lines[] = 'No. SIM : '.$b->sim_number;
+        if (!empty($d['notes'])) $lines[] = 'Catatan : '.$d['notes'];
+        array_push($lines, '', 'Estimasi total : '.$rp($b->total_estimate), 'Mohon konfirmasinya. Terima kasih.');
+
+        $wa = \App\Support\Fmt::waNumber(\App\Support\Fmt::setting('whatsapp', '6285157024883'));
+        return 'https://wa.me/'.$wa.'?text='.rawurlencode(implode("\n", $lines));
     }
 
     public function success(string $code)

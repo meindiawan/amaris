@@ -12,7 +12,7 @@ class DriverController extends Controller
     public function index(Request $r)
     {
         $q = trim((string) $r->query('q'));
-        $drivers = Driver::when($q !== '', fn ($x) => $x->where(fn ($w) => $w->where('name', 'like', "%$q%")->orWhere('phone', 'like', "%$q%")->orWhere('sim_number', 'like', "%$q%")))
+        $drivers = Driver::when($q !== '', fn ($x) => $x->where(fn ($w) => $w->where('name', 'like', "%$q%")->orWhere('phone', 'like', "%$q%")))
             ->orderByDesc('is_active')->orderBy('name')->get();
         $busy = Booking::whereIn('status', Booking::BLOCKING)->whereNotNull('driver_id')->where('end_at', '>=', now())->get()->groupBy('driver_id');
         return view('admin.drivers.index', compact('drivers', 'q', 'busy'));
@@ -23,17 +23,16 @@ class DriverController extends Controller
     public function update(Request $r, Driver $driver) { $driver->update($this->data($r)); return redirect()->route('admin.drivers.index')->with('ok', 'Data supir diperbarui.'); }
     public function destroy(Driver $driver) { $driver->delete(); return back()->with('ok', 'Supir dihapus.'); }
 
+    /** Form supir hanya: nama, no. WA, foto SIM. */
     private function data(Request $r): array
     {
         $d = $r->validate([
-            'name' => 'required|max:120', 'phone' => 'required|max:30', 'emergency_phone' => 'nullable|max:30',
-            'address' => 'nullable|max:500', 'nik' => 'nullable|max:20', 'sim_number' => 'nullable|max:40',
-            'sim_type' => 'nullable|max:20', 'sim_expiry' => 'nullable|date', 'notes' => 'nullable|max:2000',
-            'photo' => 'nullable|image|max:4096',
-        ], ['name.required' => 'Nama supir wajib diisi.', 'phone.required' => 'No. HP supir wajib diisi.']);
+            'name' => 'required|max:120', 'phone' => 'required|max:30',
+            'sim_photo' => 'nullable|file|mimes:jpg,jpeg,png,webp,pdf|max:6144',
+        ], ['name.required' => 'Nama supir wajib diisi.', 'phone.required' => 'No. WA supir wajib diisi.', 'sim_photo.mimes' => 'Foto SIM harus berupa JPG, PNG, WEBP atau PDF.']);
         $d['is_active'] = $r->boolean('is_active');
-        unset($d['photo']);
-        if ($r->hasFile('photo')) $d['photo'] = Fmt::saveUpload($r->file('photo'), 'drivers');
+        unset($d['sim_photo']);
+        if ($r->hasFile('sim_photo')) $d['sim_photo'] = Fmt::saveUpload($r->file('sim_photo'), 'sim');
         return $d;
     }
 }

@@ -28,3 +28,19 @@ Pastikan folder `storage/` dan `public/uploads/` bisa ditulis.
 - /cek-booking: buka booking dengan kode + 4 digit akhir no. HP.
 
 Ganti logo/tanda tangan invoice: timpa public/images/invoice/logo.png dan ttd.png.
+
+
+---
+
+## Revisi Oktober 2026
+
+**Setelah mengganti file, jalankan:** `php artisan migrate` (menambah tabel `vehicle_logs`, kolom `drivers.sim_photo`, dan mengganti nomor WA ke 6285157024883). Data lama tidak dihapus; catatan keluar/masuk lama otomatis diimpor ke format baru.
+
+1. **Nomor WA** admin: +62 851-5702-4883 (bisa diubah di Admin → Pengaturan).
+2. **Booking via WhatsApp**: setelah formulir booking dikirim, data tersimpan di sistem lalu pelanggan langsung diarahkan ke WA admin dengan pesan yang sudah terisi.
+3. **Armada (Nopol)**: form hanya nopol, jenis mobil, file STNK, file barcode BBM.
+4. **Daftar Supir**: form hanya nama, no. WA, foto SIM.
+5. **Mobil Keluar/Masuk**: satu baris = satu perjalanan. Nopol dari dropdown, atau pilih "Lainnya" lalu isi nopol, jenis kendaraan, rental. Kolom: nopol, jenis kendaraan, rental, tgl keluar, tgl masuk, user yang booking, invoice (belum dibuat / sudah dibuat / sudah terkirim), payment (belum / sudah + catatan penerima), driver (dropdown atau "Lainnya"), keterangan.
+6–9. Menu **Payment, Setoran, Invoice, Booking Masuk** dihapus dari admin.
+10. **Daftar Booking** (menu baru): admin memilih armada & supir yang tersedia, mengisi pelayanan / giat / standby / tujuan / kontak tamu, lalu **Salin teks** atau **Bagikan ke WA** (format Booking Order).
+11. **Video dokumenter** tampil di halaman utama (bagian "Video"). Link YouTube bisa diganti di Admin → Pengaturan.

@@ -1,5 +1,5 @@
 @extends('admin.layout') @section('content')
-<div class="page-head"><div><span>GARASI</span><h2>Mobil Keluar / Masuk</h2><p>Satu baris = satu perjalanan. Status invoice &amp; payment bisa diubah langsung dari tabel.</p></div><a class="btn" href="{{ route('admin.movements.create') }}">+ Catat Mobil Keluar/Masuk</a></div>
+<div class="page-head"><div><span>GARASI</span><h2>Mobil Keluar / Masuk</h2><p>Satu baris = satu perjalanan. Status invoice &amp; payment bisa diubah langsung dari tabel.</p></div><div class="head-actions"><a class="btn secondary" href="{{ route('admin.movements.export', request()->query()) }}">Export Excel</a><a class="btn" href="{{ route('admin.movements.create') }}">+ Catat Mobil Keluar/Masuk</a></div></div>
 <form class="scan-box" method="GET" action="{{ route('admin.movements.scan') }}">
 <input name="code" id="scan" autocomplete="off" placeholder="Scan barcode / ketik nopol, lalu Enter">
 <button class="btn">Cari Armada</button><button type="button" class="btn secondary" id="camBtn" style="display:none">📷 Kamera</button>

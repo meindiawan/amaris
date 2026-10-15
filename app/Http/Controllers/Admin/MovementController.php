@@ -33,6 +33,23 @@ class MovementController extends Controller
         return view('admin.movements.index', compact('vehicles', 'logs', 'q', 'f', 'counts'));
     }
 
+    /** Ekspor riwayat perjalanan dalam CSV yang dapat dibuka dengan Excel. */
+    public function export(Request $r)
+    {
+        $logs = VehicleLog::with(['vehicle', 'driver'])
+            ->when($r->filled('q'), fn ($x) => $x->where(fn ($w) => $w->where('plate_number', 'like', '%'.$r->query('q').'%')->orWhere('vehicle_type', 'like', '%'.$r->query('q').'%')->orWhere('driver_name', 'like', '%'.$r->query('q').'%')))
+            ->when($r->filled('vehicle'), fn ($x) => $x->where('vehicle_id', $r->query('vehicle')))
+            ->when($r->filled('date'), fn ($x) => $x->where(fn ($w) => $w->whereDate('out_date', $r->query('date'))->orWhereDate('in_date', $r->query('date'))))
+            ->orderByDesc('out_date')->get();
+        return response()->streamDownload(function () use ($logs) {
+            $out = fopen('php://output', 'w');
+            fprintf($out, "\xEF\xBB\xBF");
+            fputcsv($out, ['Nopol', 'Jenis Kendaraan', 'Tanggal Keluar', 'Tanggal Masuk', 'Penyewa/Booking', 'Driver', 'Status Kendaraan', 'Keterangan']);
+            foreach ($logs as $m) fputcsv($out, [$m->plate_number, $m->vehicle_type, optional($m->out_date)->format('Y-m-d'), optional($m->in_date)->format('Y-m-d'), $m->booker_name, $m->driver_name, $m->in_date ? 'Sudah masuk' : 'Sedang keluar', $m->notes]);
+            fclose($out);
+        }, 'riwayat-mobil-keluar-masuk.csv', ['Content-Type' => 'text/csv; charset=UTF-8']);
+    }
+
     /** Hasil scan barcode (atau ketik plat) → form catat keluar/masuk. */
     public function scan(Request $r)
     {

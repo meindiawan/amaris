@@ -1,0 +1,16 @@
+PENYESUAIAN AMARIS RENT CAR
+
+Perubahan dalam paket ini:
+- Form Booking Order admin tidak lagi menampilkan blok ringkasan data penyewa dari formulir website; pilihan paket/operasional tetap tersedia.
+- Driver yang bentrok dengan booking aktif/berjalan disembunyikan dari pilihan saat tanggal booking berubah.
+- Ringkasan dashboard admin menampilkan Unit Ready, Driver Ready, dan total riwayat mobil keluar/masuk.
+- Tombol Cetak Semua Barcode dan filter Di garasi/Sedang keluar/Nonaktif di halaman Armada (Nopol) dihilangkan; kolom lokasi menjadi Status kendaraan. Tombol Detail tetap tersedia.
+- Nopol menggunakan nowrap agar tidak terpotong/terpecah saat zoom 100%.
+- Riwayat Keluar/Masuk dapat diekspor sebagai CSV yang kompatibel dengan Excel melalui tombol Export Excel.
+- Carousel promo homepage diganti hero statis berbasis kode.
+- Teks paket diperbarui menjadi “Lepas kunci — Anda yang mengendarai sendiri.”
+- Ditambahkan halaman /galeri yang memakai foto armada dari katalog, serta halaman /artikel dan dua artikel.
+
+Tidak ada file migration yang diubah atau ditambahkan. Jalankan deployment dengan migration yang sudah ada saja; jangan menjalankan migrate:fresh.
+
+Catatan: foto mobil yang tampil pada galeri berasal dari URL gambar katalog Car yang tersimpan di database. File foto satu per satu dari kolase yang terlihat pada pesan tidak tersedia sebagai file terpisah di paket upload, sehingga belum dapat dilakukan peningkatan resolusi pada file sumber tersebut. CSS galeri melakukan crop tampilan dengan object-fit: cover tanpa mengubah file sumber.

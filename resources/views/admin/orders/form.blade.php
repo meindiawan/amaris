@@ -8,13 +8,7 @@
 <div class="page-head"><div><span>{{ $order->exists ? 'BOOKING '.$order->code : 'BOOKING ORDER BARU' }}</span><h2>{{ $order->exists ? ($order->order_name ?: $order->customer_name) : 'Buat Booking Order' }}</h2><p>@if($order->exists)Masuk {{ $order->created_at->format('d M Y, H:i') }} · <span class="status st-{{ $order->status }}">{{ $order->status_label }}</span>@else Untuk pesanan yang masuk lewat chat WhatsApp.@endif</p></div>
 <div class="head-actions">@if($order->exists && $order->wa_phone && strlen($order->wa_phone)>=9)<a class="btn wa" href="https://wa.me/{{ $order->wa_phone }}" target="_blank" rel="noopener">Chat WhatsApp ↗</a>@endif<a class="btn secondary" href="{{ route('admin.orders.index') }}">← Kembali</a></div></div>
 
-@if($isWeb)
-<div class="form-card"><h3>Data dari formulir website</h3><dl class="dl">
- <div><dt>Mobil dipesan</dt><dd>{{ $order->car_name }} · {{ $order->service_label }}</dd></div><div><dt>Penyewa</dt><dd>{{ $order->customer_name }} · {{ $order->phone }}</dd></div>
- <div><dt>NIK</dt><dd>{{ $order->nik }}</dd></div><div><dt>Estimasi</dt><dd>{{ $rp($order->total_estimate) }} ({{ $order->days }} hari)</dd></div>
- <div class="wide"><dt>Serah terima / pengembalian</dt><dd>{{ $order->pickup_label }} · {{ $order->return_label }}</dd></div>
- <div class="wide"><dt>Alamat penyewa</dt><dd>{{ $order->address }}</dd></div>
- @if($order->notes)<div class="wide"><dt>Catatan pelanggan</dt><dd>{{ $order->notes }}</dd></div>@endif</dl></div>
+</dl></div>
 @endif
 
 <form class="form-card" method="POST" action="{{ $order->exists?route('admin.orders.update',$order):route('admin.orders.store') }}">@csrf @if($order->exists) @method('PUT') @endif
@@ -47,7 +41,7 @@
  var busy={!! $busyJson !!}, g=function(i){return document.getElementById(i)};
  function overlap(b){var s=g('sd').value+'T'+(g('st').value||'00:00'),e=g('ed').value+'T'+(g('et').value||'23:59');return g('sd').value&&g('ed').value&&b.s<e&&b.e>s;}
  function mark(sel,key){var n=0;Array.prototype.forEach.call(sel.options,function(o){if(!o.value)return;var hit=busy.filter(function(b){return String(b[key])===o.value&&overlap(b);})[0];
-  o.disabled=!!hit&&!o.selected;o.textContent=o.dataset.label+(hit?'  — sedang dipakai ('+hit.c+')':'');if(hit)n++;});return n;}
+  o.disabled=!!hit&&!o.selected;o.hidden=!!hit&&!o.selected;o.textContent=o.dataset.label+(hit?'  — sedang ditugaskan ('+hit.c+')':'');if(hit)n++;});return n;}
  function run(){var a=mark(g('selV'),'v'),b=mark(g('selD'),'d'),note=g('availNote');
   note.hidden=false;note.textContent='Armada & supir yang sedang dipakai booking lain pada tanggal ini tidak bisa dipilih ('+a+' armada, '+b+' supir sibuk).';}
  ['sd','st','ed','et'].forEach(function(i){g(i).addEventListener('change',run);});run();

@@ -18,35 +18,14 @@
         <a class="brand" href="#home"><img src="{{ asset('images/logo-amaris.png') }}" alt="Amaris Ren Car"></a>
         <button class="menu-toggle" id="menuToggle" aria-label="Buka menu"><span></span><span></span><span></span></button>
         <nav class="nav-links" id="navLinks">
-            <a href="#home">Beranda</a><a href="#armada">Armada</a><a href="#video">Video</a><a href="#tentang">Tentang</a><a href="#keunggulan">Keunggulan</a><a href="#testimoni">Testimoni</a><a href="#faq">FAQ</a>
+            <a href="#home">Beranda</a><a href="#armada">Armada</a><a href="#video">Video</a><a href="#tentang">Tentang</a><a href="#keunggulan">Keunggulan</a><a href="#testimoni">Testimoni</a><a href="#faq">FAQ</a><a href="{{ route('gallery.index') }}">Galeri</a><a href="{{ route('articles.index') }}">Artikel</a>
             <a class="nav-cta" href="#armada">Pilih Mobil <span>↗</span></a>
         </nav>
     </div>
 </header>
 
 <main id="home">
-<section class="hero" id="promo">
-    <div class="hero-slider" id="heroSlider">
-        @forelse($promos as $i => $promo)
-        <article class="hero-slide {{ $i === 0 ? 'active' : '' }}" style="--hero-image:url('{{ $promo->image }}')">
-            <div class="hero-overlay"></div>
-            <div class="container hero-content">
-                <div class="hero-copy">
-                    <span class="eyebrow">{{ $promo->eyebrow ?: 'AMARIS REN CAR' }}</span>
-                    <h1>{!! nl2br(e($promo->title)) !!}</h1>
-                    <p>{{ $promo->text }}</p>
-                    <div class="hero-actions"><a href="#armada" class="btn btn-primary">Lihat Armada <span>→</span></a><a href="#tentang" class="btn btn-glass">Tentang Kami</a></div>
-                </div>
-            </div>
-        </article>
-        @empty
-        <article class="hero-slide active hero-fallback"><div class="hero-overlay"></div><div class="container hero-content"><div class="hero-copy"><span class="eyebrow">AMARIS REN CAR</span><h1>Temukan mobil yang<br><em>pas untuk perjalanan.</em></h1><p>Rental mobil nyaman, terawat, dan siap menemani berbagai kebutuhan Anda.</p><div class="hero-actions"><a href="#armada" class="btn btn-primary">Lihat Armada →</a></div></div></div></article>
-        @endforelse
-    </div>
-    @if($promos->count())
-    <div class="hero-controls container"><div class="slide-counter"><strong id="slideCurrent">01</strong><span>/ {{ str_pad($promos->count(),2,'0',STR_PAD_LEFT) }}</span></div><div class="slider-dots" id="sliderDots">@foreach($promos as $i => $promo)<button class="dot {{ $i===0?'active':'' }}" data-slide="{{ $i }}" aria-label="Slide {{ $i+1 }}"></button>@endforeach</div><div class="slider-arrows"><button id="prevSlide">←</button><button id="nextSlide">→</button></div></div>
-    @endif
-</section>
+<section class="hero hero-fallback" id="promo"><div class="hero-slider"><article class="hero-slide active hero-fallback"><div class="hero-overlay"></div><div class="container hero-content"><div class="hero-copy"><span class="eyebrow">AMARIS REN CAR</span><h1>Temukan mobil yang<br><em>pas untuk perjalanan.</em></h1><p>Rental mobil nyaman, terawat, dan siap menemani kebutuhan perjalanan bisnis, keluarga, maupun acara Anda.</p><div class="hero-actions"><a href="#armada" class="btn btn-primary">Lihat Armada <span>→</span></a><a href="#tentang" class="btn btn-glass">Tentang Kami</a></div></div></div></article></div></section>
 
 <section class="catalog-intro" id="armada">
     <div class="container">
@@ -102,7 +81,7 @@
 <section class="cta-section"><div class="container cta-inner"><div><span class="eyebrow">SIAP BERANGKAT?</span><h2>Sudah menemukan<br><em>mobilnya?</em></h2><p>Pilih unit dari katalog lalu booking langsung dari website.</p></div><a class="btn btn-light" href="#armada">Pilih Mobil <span>↗</span></a></div></section>
 </main>
 
-<footer class="footer"><div class="container"><div class="footer-top"><div class="footer-brand"><img src="{{ asset('images/logo-amaris.png') }}" alt="Amaris Ren Car"><p>Rental mobil untuk perjalanan yang lebih nyaman, aman, dan praktis.</p></div><div><h4>Menu</h4><a href="#home">Beranda</a><a href="#armada">Armada</a><a href="#tentang">Tentang</a><a href="#testimoni">Testimoni</a><a href="#faq">FAQ</a></div><div><h4>Hubungi</h4><a href="https://wa.me/{{ $settings['whatsapp'] ?? '6285157024883' }}" target="_blank">WhatsApp Admin</a><span>{{ $settings['email'] ?? 'info@amarisrencar.com' }}</span><span>{{ $settings['address'] ?? 'Kota Anda, Jawa Tengah' }}</span></div><div><h4>Ikuti Kami</h4><div class="socials"><a href="{{ $settings['instagram'] ?? '#' }}">IG</a><a href="{{ $settings['tiktok'] ?? '#' }}">TK</a></div></div></div><div class="footer-bottom"><span>© {{ date('Y') }} Amaris Ren Car. All rights reserved.</span><span>Rental Mobil • Comfort • Care • Journey</span><a class="footer-admin-btn" href="{{ route('admin.login') }}" title="Khusus pengelola website"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10.5" width="16" height="10.5" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg>Panel Admin</a></div></div></footer>
+<footer class="footer"><div class="container"><div class="footer-top"><div class="footer-brand"><img src="{{ asset('images/logo-amaris.png') }}" alt="Amaris Ren Car"><p>Rental mobil untuk perjalanan yang lebih nyaman, aman, dan praktis.</p></div><div><h4>Menu</h4><a href="#home">Beranda</a><a href="#armada">Armada</a><a href="#tentang">Tentang</a><a href="#testimoni">Testimoni</a><a href="#faq">FAQ</a><a href="{{ route('gallery.index') }}">Galeri</a><a href="{{ route('articles.index') }}">Artikel</a></div><div><h4>Hubungi</h4><a href="https://wa.me/{{ $settings['whatsapp'] ?? '6285157024883' }}" target="_blank">WhatsApp Admin</a><span>{{ $settings['email'] ?? 'info@amarisrencar.com' }}</span><span>{{ $settings['address'] ?? 'Kota Anda, Jawa Tengah' }}</span></div><div><h4>Ikuti Kami</h4><div class="socials"><a href="{{ $settings['instagram'] ?? '#' }}">IG</a><a href="{{ $settings['tiktok'] ?? '#' }}">TK</a></div></div></div><div class="footer-bottom"><span>© {{ date('Y') }} Amaris Ren Car. All rights reserved.</span><span>Rental Mobil • Comfort • Care • Journey</span><a class="footer-admin-btn" href="{{ route('admin.login') }}" title="Khusus pengelola website"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10.5" width="16" height="10.5" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg>Panel Admin</a></div></div></footer>
 
 <a class="wa-float" href="https://wa.me/{{ $settings['whatsapp'] ?? '6285157024883' }}?text={{ urlencode('Halo Amaris Ren Car, saya ingin bertanya tentang rental mobil.') }}" target="_blank" rel="noopener" aria-label="Hubungi WhatsApp"><span class="wa-icon">◔</span><span class="wa-text">Chat Admin</span></a>
 <script src="{{ asset('js/amaris.js') }}"></script>

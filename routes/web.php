@@ -6,6 +6,11 @@ use App\Http\Controllers\Admin\AuthController; use App\Http\Controllers\Admin\Da
 Route::get('/', function(){
  $cars=Car::where('is_available',true)->orderBy('sort_order')->get(); $promos=Promo::where('is_active',true)->orderBy('sort_order')->get(); $testimonials=Testimonial::where('is_active',true)->orderBy('sort_order')->get(); $faqs=Faq::where('is_active',true)->orderBy('sort_order')->get(); $settings=DB::table('site_settings')->pluck('value','key'); return view('welcome',compact('cars','promos','testimonials','faqs','settings'));
 });
+
+Route::get('/galeri', function(){ $cars=Car::whereNotNull('image')->orderBy('sort_order')->get(); return view('gallery', compact('cars')); })->name('gallery.index');
+Route::get('/artikel', function(){ return view('articles.index'); })->name('articles.index');
+Route::get('/artikel/rental-mobil-harian-semarang', function(){ return view('articles.semarang'); })->name('articles.semarang');
+Route::get('/artikel/rental-mobil-murah-terdekat', function(){ return view('articles.terdekat'); })->name('articles.terdekat');
 Route::get('/armada/{car:slug}', function(\App\Models\Car $car){
  $settings=DB::table('site_settings')->pluck('value','key');
  $booked=\App\Models\Booking::where('car_id',$car->id)->whereIn('status',\App\Models\Booking::BLOCKING)->where('end_at','>=',now())->orderBy('start_at')->get(['start_at','end_at']);
@@ -37,6 +42,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     Route::resource('vehicles', VehicleController::class)->names('admin.vehicles');
     Route::resource('drivers', DriverController::class)->except(['show'])->names('admin.drivers');
 
+    Route::get('movements/export', [MovementController::class, 'export'])->name('admin.movements.export');
     // Mobil keluar / masuk
     Route::get('movements', [MovementController::class, 'index'])->name('admin.movements.index');
     Route::get('movements/scan', [MovementController::class, 'scan'])->name('admin.movements.scan');

@@ -22,7 +22,7 @@
   <div class="booking-steps">
    <fieldset class="bcard"><legend><span>1</span> Pilih paket sewa</legend>
     <div class="opt-grid three">
-     <label class="opt"><input type="radio" name="service_type" value="self_drive" data-fee="0" {{ $service==='self_drive'?'checked':'' }}><span class="opt-body"><b>Mobil Saja</b><small>Lepas kunci — Anda yang menyetir sendiri.</small><i>Tanpa biaya tambahan</i></span></label>
+     <label class="opt"><input type="radio" name="service_type" value="self_drive" data-fee="0" {{ $service==='self_drive'?'checked':'' }}><span class="opt-body"><b>Mobil Saja</b><small>Lepas kunci — Anda yang mengendarai sendiri.</small><i>Tanpa biaya tambahan</i></span></label>
      <label class="opt"><input type="radio" name="service_type" value="with_driver" data-fee="{{ $driverFee }}" {{ $service==='with_driver'?'checked':'' }}><span class="opt-body"><b>Mobil + Supir</b><small>Disetiri supir kami. BBM &amp; biaya perjalanan ditanggung penyewa.</small><i>+ {{ $rp($driverFee) }} / hari</i></span></label>
      <label class="opt"><input type="radio" name="service_type" value="all_in" data-fee="{{ $allinFee }}" {{ $service==='all_in'?'checked':'' }}><span class="opt-body"><b>All In</b><small>Terima beres: supir, BBM, dan kebutuhan perjalanan lainnya.</small><i>+ {{ $rp($allinFee) }} / hari</i></span></label>
     </div></fieldset>

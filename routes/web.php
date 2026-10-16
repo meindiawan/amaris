@@ -6,11 +6,6 @@ use App\Http\Controllers\Admin\AuthController; use App\Http\Controllers\Admin\Da
 Route::get('/', function(){
  $cars=Car::where('is_available',true)->orderBy('sort_order')->get(); $promos=Promo::where('is_active',true)->orderBy('sort_order')->get(); $testimonials=Testimonial::where('is_active',true)->orderBy('sort_order')->get(); $faqs=Faq::where('is_active',true)->orderBy('sort_order')->get(); $settings=DB::table('site_settings')->pluck('value','key'); return view('welcome',compact('cars','promos','testimonials','faqs','settings'));
 });
-
-Route::get('/galeri', function(){ return redirect('/#galeri'); })->name('gallery.index');
-Route::get('/artikel', function(){ return redirect('/#artikel'); })->name('articles.index');
-Route::get('/artikel/rental-mobil-harian-semarang', function(){ return redirect('/#artikel'); })->name('articles.semarang');
-Route::get('/artikel/rental-mobil-murah-terdekat', function(){ return redirect('/#artikel'); })->name('articles.terdekat');
 Route::get('/armada/{car:slug}', function(\App\Models\Car $car){
  $settings=DB::table('site_settings')->pluck('value','key');
  $booked=\App\Models\Booking::where('car_id',$car->id)->whereIn('status',\App\Models\Booking::BLOCKING)->where('end_at','>=',now())->orderBy('start_at')->get(['start_at','end_at']);
@@ -31,18 +26,27 @@ use App\Http\Controllers\Admin\VehicleController; use App\Http\Controllers\Admin
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\InvoicePublicController;
 
+// Halaman publik: galeri foto & artikel (konten artikel ditulis di kode: app/Support/Artikel.php + resources/views/artikel/isi)
+Route::get('/galeri', fn () => view('galeri'))->name('galeri');
+Route::get('/artikel', fn () => view('artikel.index', ['artikels' => \App\Support\Artikel::all()]))->name('artikel.index');
+Route::get('/artikel/{slug}', function (string $slug) {
+    $artikel = \App\Support\Artikel::find($slug);
+    abort_unless($artikel, 404);
+    $lainnya = collect(\App\Support\Artikel::all())->except($slug)->all();
+    return view('artikel.show', compact('artikel', 'lainnya'));
+})->name('artikel.show');
+
 Route::get('/cek-booking', [InvoicePublicController::class, 'lookupForm'])->name('booking.lookup');
 Route::post('/cek-booking', [InvoicePublicController::class, 'lookup'])->middleware('throttle:10,1')->name('booking.lookup.post');
 Route::get('/invoice/{token}', [InvoicePublicController::class, 'show'])->middleware('throttle:60,1')->name('invoice.public');
 Route::get('/invoice/{token}/pdf', [InvoicePublicController::class, 'pdf'])->middleware('throttle:30,1')->name('invoice.public.pdf');
 
 Route::middleware('auth')->prefix('admin')->group(function () {
-    Route::get('vehicles-labels', [VehicleController::class, 'labels'])->name('admin.vehicles.labels');
+    Route::get('vehicles/{vehicle}/export', [VehicleController::class, 'export'])->name('admin.vehicles.export');
     Route::get('vehicles/{vehicle}/label', [VehicleController::class, 'label'])->name('admin.vehicles.label');
     Route::resource('vehicles', VehicleController::class)->names('admin.vehicles');
     Route::resource('drivers', DriverController::class)->except(['show'])->names('admin.drivers');
 
-    Route::get('movements/export', [MovementController::class, 'export'])->name('admin.movements.export');
     // Mobil keluar / masuk
     Route::get('movements', [MovementController::class, 'index'])->name('admin.movements.index');
     Route::get('movements/scan', [MovementController::class, 'scan'])->name('admin.movements.scan');

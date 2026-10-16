@@ -14,6 +14,8 @@ class Booking extends Model
         'with_driver' => 'Mobil + Supir',
         'all_in'      => 'All In (Supir + BBM dll)',
     ];
+    /** Nama sementara untuk booking dari website (data penyewa tidak lagi diisi di formulir, diurus admin lewat WhatsApp). */
+    public const WEB_NAME = 'Pelanggan Website';
     public const STATUSES = [
         'pending'   => 'Baru / Menunggu',
         'confirmed' => 'Dikonfirmasi',
@@ -25,6 +27,9 @@ class Booking extends Model
     public const BLOCKING = ['confirmed', 'ongoing'];
 
     public function car() { return $this->belongsTo(Car::class); }
+
+    /** Booking yang berasal dari formulir website (bukan dibuat manual oleh admin). */
+    public function getIsWebAttribute(): bool { return (int) $this->price_per_day > 0 || ($this->nik && $this->nik !== '-'); }
 
     public function getServiceLabelAttribute(): string { return self::SERVICES[$this->service_type] ?? $this->service_type; }
     public function getStatusLabelAttribute(): string { return self::STATUSES[$this->status] ?? $this->status; }

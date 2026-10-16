@@ -44,6 +44,16 @@ class Vehicle extends Model
     public function movements() { return $this->hasMany(VehicleMovement::class)->orderByDesc('moved_at')->orderByDesc('id'); }
     public function setorans() { return $this->hasMany(Setoran::class); }
 
+    /** Nopol dengan spasi tak-terputus supaya "H 1234 AO" tidak pernah pecah ke baris baru / terpotong. */
+    public function getPlateNbAttribute(): string { return str_replace(' ', "\u{00A0}", (string) $this->plate_number); }
+
+    /** Unit siap jalan: aktif, tidak sedang keluar, dan tidak sedang dipakai booking (dikonfirmasi/berjalan) saat ini. */
+    public static function readyNow()
+    {
+        return self::where('is_active', true)->where('is_out', false)->orderBy('plate_number')->get()
+            ->reject(fn (self $v) => $v->isBusy(now(), now()))->values();
+    }
+
     public function getLabelAttribute(): string { return $this->display_name ?: ($this->car->name ?? 'Unit'); }
     public function getInvoiceNameAttribute(): string { return strtoupper($this->label); }
     public function getBarcodeSvgAttribute(): string { return Code128::svg($this->barcode, 70, 2); }

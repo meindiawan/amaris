@@ -24,6 +24,8 @@ class VehicleLog extends Model
     public function vehicle() { return $this->belongsTo(Vehicle::class); }
     public function driver() { return $this->belongsTo(Driver::class); }
 
+    public function getPlateNbAttribute(): string { return str_replace(' ', "\u{00A0}", (string) $this->plate_number); }
+
     public function getIsOpenAttribute(): bool { return $this->in_date === null; }
 
     /** Samakan penanda "sedang keluar" pada unit dengan catatan terbaru. */

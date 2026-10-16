@@ -28,16 +28,9 @@ class BookingController extends Controller
             'pickup_address' => 'required_if:pickup_method,delivery|nullable|string|max:500',
             'return_method'  => 'required|in:office,pickup',
             'return_address' => 'required_if:return_method,pickup|nullable|string|max:500',
-            'customer_name'  => 'required|string|max:120',
-            'phone'          => ['required', 'regex:/^[0-9+\-\s]{9,18}$/'],
-            'email'          => 'nullable|email|max:120',
-            'nik'            => 'required|digits:16',
-            'address'        => 'required|string|max:500',
-            'sim_number'     => 'nullable|string|max:40',
             'destination'    => 'nullable|string|max:200',
             'passengers'     => 'nullable|integer|min:1|max:30',
             'notes'          => 'nullable|string|max:1000',
-            'agree'          => 'accepted',
         ], [
             'service_type.required'   => 'Pilih paket sewa terlebih dahulu.',
             'start_date.required'     => 'Tanggal ambil (check-in) wajib diisi.',
@@ -48,13 +41,6 @@ class BookingController extends Controller
             'end_time.required'       => 'Jam kembali wajib diisi.',
             'pickup_address.required_if' => 'Alamat pengantaran mobil wajib diisi.',
             'return_address.required_if' => 'Alamat penjemputan mobil wajib diisi.',
-            'customer_name.required'  => 'Nama lengkap wajib diisi.',
-            'phone.required'          => 'Nomor WhatsApp wajib diisi.',
-            'phone.regex'             => 'Nomor WhatsApp tidak valid.',
-            'nik.required'            => 'NIK (nomor KTP) wajib diisi.',
-            'nik.digits'              => 'NIK harus 16 digit angka.',
-            'address.required'        => 'Alamat penyewa wajib diisi.',
-            'agree.accepted'          => 'Centang persetujuan syarat & ketentuan untuk melanjutkan.',
         ]);
 
         $start = Carbon::parse($d['start_date'].' '.$d['start_time']);
@@ -83,9 +69,8 @@ class BookingController extends Controller
             'service_type' => $d['service_type'], 'start_at' => $start, 'end_at' => $end, 'days' => $days,
             'pickup_method' => $d['pickup_method'], 'pickup_address' => $d['pickup_method'] === 'delivery' ? $d['pickup_address'] : null,
             'return_method' => $d['return_method'], 'return_address' => $d['return_method'] === 'pickup' ? $d['return_address'] : null,
-            'customer_name' => $d['customer_name'], 'phone' => $d['phone'], 'email' => $d['email'] ?? null,
-            'nik' => $d['nik'], 'address' => $d['address'],
-            'sim_number' => $d['service_type'] === 'self_drive' ? ($d['sim_number'] ?? null) : null,
+            // Data penyewa tidak diisi di formulir — dilengkapi admin lewat chat WhatsApp.
+            'customer_name' => Booking::WEB_NAME, 'phone' => '-', 'email' => null, 'nik' => '-', 'address' => '-', 'sim_number' => null,
             'destination' => $d['destination'] ?? null, 'passengers' => $d['passengers'] ?? null, 'notes' => $d['notes'] ?? null,
             'price_per_day' => $car->price, 'service_fee_per_day' => $feePerDay, 'delivery_fee' => $delivery,
             'total_estimate' => $total, 'status' => 'pending',
@@ -112,10 +97,8 @@ class BookingController extends Controller
         ];
         if (!empty($d['destination'])) $lines[] = 'Tujuan : '.$d['destination'];
         if (!empty($d['passengers'])) $lines[] = 'Penumpang : '.$d['passengers'].' orang';
-        array_push($lines, '', 'Nama : '.$b->customer_name, 'No. WA : '.$b->phone, 'NIK : '.$b->nik, 'Alamat : '.$b->address);
-        if ($b->sim_number) $lines[] = 'No. SIM : '.$b->sim_number;
         if (!empty($d['notes'])) $lines[] = 'Catatan : '.$d['notes'];
-        array_push($lines, '', 'Estimasi total : '.$rp($b->total_estimate), 'Mohon konfirmasinya. Terima kasih.');
+        array_push($lines, '', 'Estimasi total : '.$rp($b->total_estimate), '', 'Mohon konfirmasinya, data penyewa (nama, KTP, SIM) akan saya kirim di chat ini. Terima kasih.');
 
         $wa = \App\Support\Fmt::waNumber(\App\Support\Fmt::setting('whatsapp', '6285157024883'));
         return 'https://wa.me/'.$wa.'?text='.rawurlencode(implode("\n", $lines));

@@ -1,16 +1,16 @@
 @extends('admin.layout') @section('content')
-<div class="page-head"><div><span>GARASI</span><h2>Mobil Keluar / Masuk</h2><p>Satu baris = satu perjalanan. Status invoice &amp; payment bisa diubah langsung dari tabel.</p></div><div class="head-actions"><a class="btn secondary" href="{{ route('admin.movements.export', request()->query()) }}">Export Excel</a><a class="btn" href="{{ route('admin.movements.create') }}">+ Catat Mobil Keluar/Masuk</a></div></div>
+<div class="page-head"><div><span>GARASI</span><h2>Mobil Keluar / Masuk</h2><p>Satu baris = satu perjalanan. Status invoice &amp; payment bisa diubah langsung dari tabel.</p></div><a class="btn" href="{{ route('admin.movements.create') }}">+ Catat Mobil Keluar/Masuk</a></div>
 <form class="scan-box" method="GET" action="{{ route('admin.movements.scan') }}">
 <input name="code" id="scan" autocomplete="off" placeholder="Scan barcode / ketik nopol, lalu Enter">
 <button class="btn">Cari Armada</button><button type="button" class="btn secondary" id="camBtn" style="display:none">📷 Kamera</button>
 <small>Pemindai barcode USB bekerja seperti keyboard — arahkan kursor ke kolom ini lalu scan. Hasilnya membuka form catatan dengan nopol terisi.</small></form>
 <video id="camVideo" playsinline style="display:none;width:100%;max-width:420px;border-radius:14px;margin-bottom:16px"></video>
-<div class="unit-grid">@foreach($vehicles as $v)<a class="unit-card {{ $v->is_out?'is-out':'' }}" href="{{ route('admin.movements.create',['vehicle'=>$v->id]) }}"><span class="plate">{{ $v->plate_number }}</span><small>{{ $v->label }}</small>@if($v->is_out)<span class="status out">Keluar · {{ optional($v->last_moved_at)->format('d M') }}</span>@else<span class="status in">Di garasi</span>@endif</a>@endforeach</div>
+<div class="unit-grid">@foreach($vehicles as $v)<a class="unit-card {{ $v->is_out?'is-out':'' }}" href="{{ route('admin.movements.create',['vehicle'=>$v->id]) }}"><span class="plate">{{ $v->plate_nb }}</span><small>{{ $v->label }}</small>@if($v->is_out)<span class="status out">Keluar · {{ optional($v->last_moved_at)->format('d M') }}</span>@else<span class="status in">Di garasi</span>@endif</a>@endforeach</div>
 <div class="filter-tabs"><a href="{{ route('admin.movements.index') }}" class="{{ !$f?'on':'' }}">Semua <b>{{ $counts['all'] }}</b></a><a href="{{ route('admin.movements.index',['f'=>'out']) }}" class="{{ $f==='out'?'on':'' }}">Belum masuk <b>{{ $counts['out'] }}</b></a><a href="{{ route('admin.movements.index',['f'=>'unpaid']) }}" class="{{ $f==='unpaid'?'on':'' }}">Belum payment <b>{{ $counts['unpaid'] }}</b></a><a href="{{ route('admin.movements.index',['f'=>'noinvoice']) }}" class="{{ $f==='noinvoice'?'on':'' }}">Invoice belum terkirim <b>{{ $counts['noinvoice'] }}</b></a></div>
 <div class="table-card scroll-x"><form method="GET" class="search-box" style="margin-bottom:10px">@if($f)<input type="hidden" name="f" value="{{ $f }}">@endif<input name="q" value="{{ $q }}" placeholder="Cari nopol, jenis, rental, booking, driver…"><select name="vehicle" class="in" style="padding:10px;border-radius:11px"><option value="">Semua nopol</option>@foreach($vehicles as $v)<option value="{{ $v->id }}" @selected(request('vehicle')==$v->id)>{{ $v->plate_number }}</option>@endforeach</select><input type="date" name="date" value="{{ request('date') }}"><button class="btn">Filter</button></form>
 <table class="log-table"><thead><tr><th>Nopol</th><th>Jenis kendaraan</th><th>Rental</th><th>Tgl keluar</th><th>Tgl masuk</th><th>User yg booking</th><th>Invoice</th><th>Payment</th><th>Driver</th><th>Keterangan</th><th></th></tr></thead><tbody>
 @forelse($logs as $m)<tr>
-<td><span class="plate">{{ $m->plate_number }}</span></td>
+<td class="plate-cell"><span class="plate">{{ $m->plate_nb }}</span></td>
 <td>{{ $m->vehicle_type ?: '-' }}</td>
 <td>{{ $m->rental_name ?: '-' }}</td>
 <td>{{ $m->out_date->format('d M Y') }}</td>

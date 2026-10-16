@@ -8,7 +8,7 @@
 <!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{{ $car->name }} — Amaris Ren Car</title><link rel="icon" href="{{ asset('images/logo-amaris.png') }}"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="{{ asset('css/amaris.css') }}"><link rel="stylesheet" href="{{ asset('css/booking.css') }}"></head><body><header class="navbar"><div class="container nav-inner"><a class="brand" href="/"><img src="{{ asset('images/logo-amaris.png') }}"></a><nav class="nav-links"><a href="/#armada">Armada</a><a class="nav-cta" href="#booking">Booking Sekarang ↗</a></nav></div></header><main class="car-detail-page"><div class="container"><a class="back-link" href="/#armada">← Kembali ke armada</a><div class="detail-grid"><div class="detail-image"><img src="{{ $car->image }}" alt="{{ $car->name }}"></div><div class="detail-copy"><span class="eyebrow dark">AMARIS FLEET</span><h1>{{ $car->name }}</h1><p class="detail-desc">{{ $car->description ?: 'Mobil siap digunakan untuk perjalanan keluarga, bisnis, maupun kebutuhan harian.' }}</p><div class="specs"><div><small>Tipe</small><b>{{ $car->type }}</b></div><div><small>Transmisi</small><b>{{ $car->transmission }}</b></div><div><small>Kapasitas</small><b>{{ $car->seats }} orang</b></div><div><small>Status</small><b>{{ $car->is_available?'Tersedia':'Tidak tersedia' }}</b></div></div><div class="detail-price"><small>Mulai dari</small><strong>Rp {{ number_format($car->price,0,',','.') }} <i>/ hari</i></strong></div><div class="detail-cta">@if($car->is_available)<a class="btn btn-primary" href="#booking">Booking Sekarang ↓</a>@endif<a class="btn btn-outline" href="https://wa.me/{{ $wa }}?text={{ urlencode('Halo Amaris Ren Car, saya ingin bertanya tentang '.$car->name.'.') }}" target="_blank" rel="noopener">Tanya via WhatsApp ↗</a></div></div></div></div>
 
 <section class="booking-section" id="booking"><div class="container">
- <div class="booking-head"><span class="eyebrow dark">BOOKING ONLINE</span><h2>Booking {{ $car->name }}</h2><p>Isi formulir di bawah. Setelah dikirim, Anda otomatis diarahkan ke WhatsApp admin untuk konfirmasi ketersediaan dan pembayaran.</p></div>
+ <div class="booking-head"><span class="eyebrow dark">BOOKING ONLINE</span><h2>Booking {{ $car->name }}</h2><p>Pilih paket, jadwal, dan lokasi di bawah. Setelah dikirim, Anda otomatis diarahkan ke WhatsApp admin untuk konfirmasi ketersediaan dan pembayaran.</p></div>
 
  @if($errors->any())<div class="form-alert" id="formAlert"><b>Mohon periksa kembali isian Anda:</b><ul>@foreach($errors->all() as $e)<li>{{ $e }}</li>@endforeach</ul></div>@endif
 
@@ -54,20 +54,6 @@
     <label class="full addr" id="returnWrap" {{ $rm==='pickup'?'':'hidden' }}>Alamat penjemputan<textarea name="return_address" id="returnAddr" rows="2" placeholder="Alamat lengkap + patokan">{{ old('return_address') }}</textarea></label>
    </fieldset>
 
-   <fieldset class="bcard"><legend><span>4</span> Data penyewa</legend>
-    <div class="fgrid">
-     <label>Nama lengkap (sesuai KTP)<input name="customer_name" value="{{ old('customer_name') }}" required maxlength="120" autocomplete="name"></label>
-     <label>No. WhatsApp<input name="phone" type="tel" value="{{ old('phone') }}" required placeholder="08xxxxxxxxxx" autocomplete="tel"></label>
-     <label>NIK (No. KTP, 16 digit)<input name="nik" value="{{ old('nik') }}" required inputmode="numeric" maxlength="16" pattern="[0-9]{16}" placeholder="16 digit angka"></label>
-     <label>Email <em>(opsional)</em><input name="email" type="email" value="{{ old('email') }}" autocomplete="email"></label>
-     <label class="full">Alamat lengkap penyewa<textarea name="address" rows="2" required placeholder="Sesuai domisili saat ini">{{ old('address') }}</textarea></label>
-     <label id="simWrap">No. SIM A <em>(untuk paket lepas kunci)</em><input name="sim_number" value="{{ old('sim_number') }}" maxlength="40"></label>
-     <label>Jumlah penumpang <em>(opsional)</em><input name="passengers" type="number" min="1" max="{{ max(1,$car->seats) }}" value="{{ old('passengers') }}"></label>
-     <label class="full">Tujuan / keperluan <em>(opsional)</em><input name="destination" value="{{ old('destination') }}" maxlength="200" placeholder="Mis. wisata Yogyakarta, acara keluarga, dinas luar kota"></label>
-     <label class="full">Catatan tambahan <em>(opsional)</em><textarea name="notes" rows="2" placeholder="Permintaan khusus: kursi bayi, rute, jam jemput, dll">{{ old('notes') }}</textarea></label>
-    </div>
-    <label class="agree"><input type="checkbox" name="agree" value="1" {{ old('agree')?'checked':'' }} required> <span>Saya menyatakan data di atas benar dan menyetujui syarat &amp; ketentuan sewa. <em>{{ $settings['terms'] ?? '' }}</em></span></label>
-   </fieldset>
   </div>
 
   <aside class="booking-summary"><div class="sum-card">
@@ -78,7 +64,7 @@
    <div class="srow" id="sumDelivRow" hidden><span>Antar / jemput</span><b id="sumDeliv"></b></div>
    <div class="stotal"><span>Estimasi total</span><strong id="sumTotal">{{ $rp($car->price) }}</strong></div>
    <button class="btn btn-primary" type="submit" id="submitBtn">Booking via WhatsApp →</button>
-   <small class="sum-note">Ini hanya estimasi. Biaya final (deposit, kelebihan jam, BBM, tol, dll) dikonfirmasi admin sebelum serah terima.</small>
+   <small class="sum-note">Ini hanya estimasi. Biaya final (deposit, kelebihan jam, BBM, tol, dll) dikonfirmasi admin sebelum serah terima. Data penyewa diisi langsung lewat chat WhatsApp. Dengan menekan tombol, Anda menyetujui syarat &amp; ketentuan sewa. <em>{{ $settings['terms'] ?? '' }}</em></small>
   </div></aside>
  </form>
  @endif

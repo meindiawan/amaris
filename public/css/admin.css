@@ -28,7 +28,7 @@ label.stack{display:grid;gap:7px;font-weight:700;font-size:13px;margin:14px 0}la
 .exp{display:inline-block;padding:4px 8px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap}
 .exp.ok{background:#e9f7ed;color:#26743e}.exp.warn{background:#fff3df;color:#a8650c}.exp.bad{background:#fdeceb;color:#b3372d}
 .status.out{background:#efe8ff;color:#5a37a8}.status.in{background:#e9f7ed;color:#26743e}.status.pay-paid{background:#e9f7ed;color:#26743e}.status.pay-partial{background:#fff3df;color:#a8650c}.status.pay-unpaid{background:#fdeceb;color:#b3372d}
-.plate{display:inline-block;white-space:nowrap;word-break:normal;overflow-wrap:normal;min-width:max-content;border:2px solid #241c35;border-radius:7px;padding:5px 10px;font:800 14px Manrope;letter-spacing:1px;background:#fff;line-height:1.35}
+.plate{display:inline-block;border:2px solid #241c35;border-radius:7px;padding:3px 10px;font:800 14px Manrope;letter-spacing:1px;background:#fff}
 .scan-box{display:flex;gap:10px;flex-wrap:wrap;background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;margin-bottom:20px;align-items:center}
 .scan-box input{flex:1;min-width:220px;padding:14px;border:2px solid var(--orange);border-radius:12px;font:700 16px Manrope;letter-spacing:1px}
 .scan-box small{flex-basis:100%;color:var(--muted)}
@@ -71,3 +71,26 @@ label.stack{display:grid;gap:7px;font-weight:700;font-size:13px;margin:14px 0}la
 .sel.inv-sudah_terkirim,.sel.pay-sudah{background:#e9f7ed;color:#26743e;border-color:#bfe3c9}
 .other-box{background:#faf5ec;border:1px dashed #d9ccb9;border-radius:14px;padding:14px}
 .log-table{min-width:1180px}.log-table .plate{white-space:nowrap}.log-table td{font-size:13px}
+
+/* ===== Revisi 15 Okt 2026 ===== */
+/* Nopol tidak boleh terpotong / pecah baris, berapa pun lebar layar & zoom */
+.plate{white-space:nowrap;flex:none;max-width:none}
+.plate-cell,.log-table th:first-child,.log-table td:first-child,.hist-table td:first-child{min-width:128px;white-space:nowrap}
+.log-table{table-layout:auto}
+/* Dashboard: unit & driver ready */
+.stats .ready strong{color:#26743e}
+.dash-cols{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:0 0 22px}
+.dash-panel{padding:20px 22px}
+.dash-panel .recent-head{margin-bottom:14px}
+.chip-list{display:flex;flex-wrap:wrap;gap:10px}
+.ready-chip{display:flex;flex-direction:column;gap:4px;background:#f6fbf7;border:1px solid #cfe8d6;border-radius:12px;padding:10px 14px;text-decoration:none;color:var(--ink);min-width:130px}
+.ready-chip small{color:var(--muted)}
+.ready-chip:hover{border-color:var(--orange)}
+.dash-panel .empty{margin:0;padding:6px 0}
+/* Detail kendaraan: riwayat + export */
+.detail-btn{background:var(--purple2);color:#fff!important;padding:6px 14px;border-radius:9px;font-weight:700;text-decoration:none}
+.hist-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:6px}.hist-head h3{margin:0}
+.hist-filter{display:flex;gap:10px;align-items:end;flex-wrap:wrap;margin:10px 0 14px}.hist-filter label{display:grid;gap:4px;font-size:12px;font-weight:700;color:var(--muted)}.hist-filter input{padding:9px 10px;border:1px solid #ded4c8;border-radius:10px;font:inherit}
+.hist-table{min-width:720px}
+@media(max-width:900px){.dash-cols{grid-template-columns:1fr}}
+.page-head h2 .plate{font:800 18px Manrope;letter-spacing:1px;color:var(--ink);text-transform:none;padding:4px 12px;margin-right:6px;vertical-align:middle}

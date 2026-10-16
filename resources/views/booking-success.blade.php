@@ -1,13 +1,13 @@
 @php
  $rp = fn($n) => 'Rp '.number_format($n,0,',','.');
  $wa = $settings['whatsapp'] ?? '6285157024883';
- $msg = "Halo Amaris Ren Car, saya sudah booking online.\nKode: {$booking->code}\nMobil: {$booking->car_name}\nPaket: {$booking->service_label}\nAmbil: ".$booking->start_at->format('d M Y H:i')."\nKembali: ".$booking->end_at->format('d M Y H:i')." ({$booking->days} hari)\nNama: {$booking->customer_name}\nMohon konfirmasinya. Terima kasih.";
+ $msg = "Halo Amaris Ren Car, saya sudah booking online.\nKode: {$booking->code}\nMobil: {$booking->car_name}\nPaket: {$booking->service_label}\nAmbil: ".$booking->start_at->format('d M Y H:i')."\nKembali: ".$booking->end_at->format('d M Y H:i')." ({$booking->days} hari)\nMohon konfirmasinya. Terima kasih.";
 @endphp
 <!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Booking Diterima — Amaris Ren Car</title><link rel="icon" href="{{ asset('images/logo-amaris.png') }}"><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="{{ asset('css/amaris.css') }}"><link rel="stylesheet" href="{{ asset('css/booking.css') }}"></head><body>
 <header class="navbar"><div class="container nav-inner"><a class="brand" href="/"><img src="{{ asset('images/logo-amaris.png') }}"></a><nav class="nav-links"><a href="/#armada">Armada</a><a href="{{ route('booking.lookup') }}">Cek Booking</a></nav></div></header>
 <main class="car-detail-page"><div class="container"><div class="success-card">
- <div class="success-icon">✓</div><span class="eyebrow dark">BOOKING DITERIMA</span><h1>Terima kasih, {{ $booking->customer_name }}!</h1>
- <p>Booking Anda sudah masuk ke sistem kami. Admin akan segera menghubungi Anda via WhatsApp di <b>{{ $booking->phone }}</b> untuk konfirmasi.</p>
+ <div class="success-icon">✓</div><span class="eyebrow dark">BOOKING DITERIMA</span><h1>Terima kasih{{ $booking->customer_name !== \App\Models\Booking::WEB_NAME ? ', '.$booking->customer_name : '' }}!</h1>
+ <p>Booking Anda sudah masuk ke sistem kami. Admin akan segera menghubungi Anda via WhatsApp {!! strlen(preg_replace('/\D+/','',(string)$booking->phone))>=9 ? 'di <b>'.e($booking->phone).'</b> ' : '' !!}untuk konfirmasi.</p>
  <div class="code-box"><small>Kode booking</small><strong>{{ $booking->code }}</strong></div>
  <dl class="sum-list">
   <div><dt>Mobil</dt><dd>{{ $booking->car_name }}</dd></div><div><dt>Paket</dt><dd>{{ $booking->service_label }}</dd></div>

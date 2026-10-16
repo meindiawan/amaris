@@ -22,6 +22,14 @@ class Driver extends Model
     }
     public function getSimStateAttribute(): ?array { return Fmt::expiry($this->sim_expiry); }
 
+    /** Supir siap tugas: aktif, tidak sedang di booking (dikonfirmasi/berjalan) dan tidak sedang membawa mobil yang belum masuk. */
+    public static function readyNow()
+    {
+        $out = VehicleLog::whereNull('in_date')->whereNotNull('driver_id')->pluck('driver_id')->all();
+        return self::where('is_active', true)->whereNotIn('id', $out)->orderBy('name')->get()
+            ->reject(fn (self $d) => $d->isBusy(now(), now()))->values();
+    }
+
     /** Supir yang tidak dipakai booking lain (confirmed/ongoing) pada rentang waktu itu. */
     public function isBusy($start, $end, ?int $exceptBookingId = null): bool
     {

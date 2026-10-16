@@ -21,7 +21,6 @@
   const calc = () => {
     const svcInput = form.querySelector('[name="service_type"]:checked');
     const fee = +(svcInput?.dataset.fee || 0), svc = svcInput?.value;
-    $('simWrap').hidden = svc !== 'self_drive';
     const label = { self_drive: 'Mobil saja', with_driver: 'Tambahan supir', all_in: 'Tambahan All In' }[svc];
     $('sumSvcLabel').textContent = label;
 
@@ -50,7 +49,6 @@
   el.sd.addEventListener('change', () => { el.ed.min = el.sd.value || today; if (el.ed.value && el.ed.value < el.sd.value) el.ed.value = el.sd.value; calc(); });
   form.addEventListener('change', () => { toggleAddr(); calc(); });
   form.addEventListener('input', (e) => { if (e.target.matches('input[type=time]')) calc(); });
-  form.querySelector('[name="nik"]').addEventListener('input', (e) => { e.target.value = e.target.value.replace(/\D/g, '').slice(0, 16); });
   toggleAddr(); calc();
 
   // Bila ada error validasi dari server, langsung gulir ke form

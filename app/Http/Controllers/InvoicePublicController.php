@@ -19,11 +19,14 @@ class InvoicePublicController extends Controller
     public function lookupForm() { return view('cek-booking'); }
     public function lookup(Request $r)
     {
-        $d = $r->validate(['code' => 'required|max:20', 'phone' => 'required|max:30']);
+        $d = $r->validate(['code' => 'required|max:20', 'phone' => 'nullable|max:30']);
         $b = Booking::where('code', strtoupper(trim($d['code'])))->first();
-        $last = substr(preg_replace('/\D+/', '', $d['phone']), -4);
-        if (!$b || strlen($last) < 4 || substr(preg_replace('/\D+/', '', $b->phone), -4) !== $last) {
-            return back()->withInput()->withErrors(['code' => 'Kode booking atau nomor HP tidak cocok.']);
+        if (!$b) return back()->withInput()->withErrors(['code' => 'Kode booking tidak ditemukan.']);
+        // Booking lama punya no. HP → wajib cocok 4 digit terakhir. Booking dari formulir baru tidak menyimpan no. HP → cukup kode.
+        $stored = substr(preg_replace('/\D+/', '', (string) $b->phone), -4);
+        if (strlen($stored) === 4) {
+            $last = substr(preg_replace('/\D+/', '', (string) ($d['phone'] ?? '')), -4);
+            if ($last !== $stored) return back()->withInput()->withErrors(['code' => 'Kode booking atau nomor HP tidak cocok.']);
         }
         return redirect()->route('booking.success', $b->code);
     }

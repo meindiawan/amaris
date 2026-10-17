@@ -81,3 +81,9 @@
 .text-link .bi{display:inline-block}
 .footer .socials{gap:6px}.footer .socials .soc{width:32px;height:32px}.footer .socials .soc .bi{width:16px;height:16px}
 .footer .fc-link:nth-of-type(2) .bi{color:#1877f2}
+
+/* HERO: foto mobil HD sebagai latar (samar, tertutup warna) — sama di HP & komputer */
+.hero-visual{display:none!important}
+.hero-slide.hero-fallback{background-color:#201735;background-image:linear-gradient(115deg,rgba(32,23,53,.80) 0%,rgba(52,36,80,.70) 55%,rgba(75,53,95,.60) 100%),url('https://images.unsplash.com/photo-1560996667-33386f60e00b?auto=format&fit=crop&w=2000&q=80'),url('../images/galeri/amaris-15.jpg');background-size:cover,cover,cover;background-position:center,center 60%,center;background-repeat:no-repeat}
+.hero-overlay{background:linear-gradient(90deg,rgba(19,13,32,.55) 0%,rgba(19,13,32,.25) 60%,rgba(19,13,32,.1) 100%)!important}
+.hero-content{justify-content:flex-start}

@@ -13,7 +13,7 @@
 <nav class="nav-links" id="navLinks"><a href="{{ url('/') }}">Beranda</a><a href="{{ url('/#armada') }}">Armada</a><a href="{{ url('/galeri') }}" class="{{ request()->is('galeri') ? 'is-on' : '' }}">Galeri</a><a href="{{ url('/artikel') }}" class="{{ request()->is('artikel*') ? 'is-on' : '' }}">Artikel</a><a href="{{ url('/#faq') }}">FAQ</a><a class="nav-cta" href="{{ url('/#armada') }}">Pilih Mobil <span>↗</span></a></nav></div></header>
 <main class="page-main">@yield('content')</main>
 <footer class="footer"><div class="container"><div class="footer-bottom"><span>© {{ date('Y') }} Amaris Ren Car. All rights reserved.</span><span>Rental Mobil • Comfort • Care • Journey</span></div></div></footer>
-<a class="wa-float" href="https://wa.me/{{ $waNum }}?text={{ urlencode('Halo Amaris Ren Car, saya ingin bertanya tentang rental mobil.') }}" target="_blank" rel="noopener" aria-label="Hubungi WhatsApp"><span class="wa-icon">◔</span><span class="wa-text">Chat Admin</span></a>
+@include('partials.contact-float')
 <script src="{{ asset('js/amaris.js') }}"></script>
 @stack('scripts')
 </body></html>

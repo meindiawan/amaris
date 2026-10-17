@@ -71,5 +71,5 @@
 </div></section>
 </main>
 <footer class="detail-foot"><div class="container"><span>© {{ date('Y') }} Amaris Ren Car</span>@if(str_contains((string)$car->image,'wikimedia'))<span>Foto: Wikimedia Commons (CC BY-SA)</span>@endif</div></footer>
-<a class="wa-float" href="https://wa.me/{{ $wa }}?text={{ urlencode('Halo Amaris Ren Car, saya ingin bertanya tentang rental '.$car->name.'.') }}" target="_blank" rel="noopener" aria-label="Hubungi WhatsApp"><span class="wa-icon">◔</span><span class="wa-text">Chat Admin</span></a>
+@include('partials.contact-float')
 <script src="{{ asset('js/booking.js') }}"></script></body></html>

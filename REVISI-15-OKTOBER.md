@@ -14,3 +14,8 @@ Tidak ada migration baru (aman, tidak menumpuk). Jalankan seperti biasa; jika da
 - Carousel promo dihapus, diganti hero statis dari kode.
 - Halaman baru: **/galeri** (22 foto, bisa diperbesar) dan **/artikel** (3 artikel). Konten artikel ada di `app/Support/Artikel.php` dan `resources/views/artikel/isi/`.
 - Cek Booking: booking dari formulir baru cukup dengan kode booking.
+
+## Tambahan 17 Oktober
+- Carousel/hero atas beranda kini menampilkan foto mobil (Alphard, HiAce Premio, Pajero Sport, Jeep Wrangler, Alphard Pengantin) yang berganti otomatis tiap 4 detik, bisa diklik lewat titik navigasi.
+- Semua tombol di admin dirapikan dengan satu sistem gaya (admin.css, bagian "SISTEM TOMBOL ADMIN"): tombol utama, sekunder, Detail, Edit, Hapus, filter, pager, dan menu sidebar. Tanpa perubahan database/migrasi.
+- Ikon asli (SVG): tombol melayang WhatsApp (hijau resmi, berdenyut); Facebook hanya di footer (tampil jika link diisi di Admin > Pengaturan > Facebook), footer (Hubungi & Ikuti Kami: WhatsApp, Facebook, Instagram, TikTok), dan semua ikon menu sidebar admin. Kolom "facebook" memakai tabel site_settings yang sudah ada — tanpa migrasi.

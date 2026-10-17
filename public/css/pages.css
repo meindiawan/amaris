@@ -40,3 +40,44 @@
 @media(max-width:1050px){.gallery-grid{grid-template-columns:repeat(3,1fr)}.artikel-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:900px){.hero-highlights{display:none}}
 @media(max-width:760px){.page-main{padding-top:72px}.gallery-grid{grid-template-columns:1fr 1fr;gap:10px}.artikel-grid{grid-template-columns:1fr}.lb-prev{left:6px}.lb-next{right:6px}.artikel-isi{font-size:16px}}
+
+/* Card artikel di beranda (section Tentang) */
+.home-artikel{padding-top:34px}.home-artikel .artikel-body h3{font:700 20px/1.3 'DM Sans',sans-serif;margin:0}.home-artikel .artikel-body h3 a:hover{color:var(--orange)}
+
+/* Hero: foto armada berganti otomatis */
+.hero-visual{flex:0 0 min(520px,44%);position:relative;z-index:2;margin-top:46px}
+.hv-frame{position:relative;aspect-ratio:3/2;border-radius:24px;overflow:hidden;border:1px solid rgba(255,255,255,.22);box-shadow:0 30px 60px rgba(0,0,0,.45);background:#120c20}
+.hero-visual::before{content:"";position:absolute;inset:18px -18px -18px 18px;border:2px solid var(--orange);border-radius:26px;opacity:.7;z-index:-1}
+.hv-slide{position:absolute;inset:0;margin:0;opacity:0;transition:opacity .9s ease}.hv-slide.active{opacity:1}
+.hv-slide img{width:100%;height:100%;object-fit:cover;display:block}
+.hv-slide figcaption{position:absolute;left:0;right:0;bottom:0;padding:46px 22px 18px;background:linear-gradient(0deg,rgba(15,10,26,.88),transparent);color:#fff;display:grid;gap:2px}
+.hv-slide figcaption b{font:800 19px 'Manrope',sans-serif}.hv-slide figcaption span{font-size:13px;color:#e0d8e6}
+.hv-dots{position:absolute;right:18px;bottom:20px;display:flex;gap:7px;z-index:3}
+.hv-dots button{width:9px;height:9px;padding:0;border:0;border-radius:99px;background:rgba(255,255,255,.45);cursor:pointer;transition:.25s}.hv-dots button.active{width:26px;background:var(--orange)}
+.hero-pills{display:flex;flex-wrap:wrap;gap:10px;list-style:none;padding:0;margin:26px 0 0}
+.hero-pills li{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;border-radius:99px;padding:8px 15px;font-size:12.5px;font-weight:600}
+@media(max-width:1050px){.hero-visual{flex-basis:min(420px,42%)}}
+@media(max-width:900px){.hero-visual{display:none}}
+
+/* IKON & KONTAK (WhatsApp / Facebook asli) — 17 Okt */
+.bi{width:1em;height:1em;display:block;flex:none}
+.contact-float{position:fixed;z-index:60;right:22px;bottom:22px;display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+.cf-btn{display:flex;align-items:center;gap:10px;color:#fff;border-radius:99px;padding:8px 18px 8px 8px;font:800 12px 'DM Sans',sans-serif;box-shadow:0 12px 28px rgba(0,0,0,.22);transition:transform .18s,box-shadow .18s}
+.cf-btn:hover{transform:translateY(-3px);box-shadow:0 16px 34px rgba(0,0,0,.28)}
+.cf-btn .bi{width:38px;height:38px;padding:9px;border-radius:50%;background:#fff;box-sizing:border-box}
+.cf-wa{background:#25d366}.cf-wa .bi{color:#25d366}
+.cf-fb{background:#1877f2}.cf-fb .bi{color:#1877f2}
+.cf-wa::after{content:"";position:absolute;inset:0;border-radius:99px;box-shadow:0 0 0 0 rgba(37,211,102,.5);animation:cfpulse 2.4s infinite;pointer-events:none}
+.cf-wa{position:relative}
+@keyframes cfpulse{70%{box-shadow:0 0 0 14px rgba(37,211,102,0)}100%{box-shadow:0 0 0 0 rgba(37,211,102,0)}}
+@media(max-width:760px){.contact-float{right:14px;bottom:14px}.cf-btn{padding:6px}.cf-text{display:none}}
+.footer .fc-link{display:flex;align-items:center;gap:8px}.footer .fc-link .bi{width:15px;height:15px}
+.footer .fc-link:nth-of-type(1) .bi{color:#25d366}
+.footer .socials{gap:9px;flex-wrap:wrap}
+.footer .socials .soc{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;margin:0;color:#fff;border-color:transparent;transition:transform .15s}
+.footer .socials .soc:hover{transform:translateY(-2px);color:#fff}
+.footer .socials .soc .bi{width:18px;height:18px}
+.soc-wa{background:#25d366}.soc-fb{background:#1877f2}.soc-ig{background:linear-gradient(45deg,#f9a03f,#e1306c 55%,#7a3fd1)}.soc-tk{background:#111}
+.text-link .bi{display:inline-block}
+.footer .socials{gap:6px}.footer .socials .soc{width:32px;height:32px}.footer .socials .soc .bi{width:16px;height:16px}
+.footer .fc-link:nth-of-type(2) .bi{color:#1877f2}

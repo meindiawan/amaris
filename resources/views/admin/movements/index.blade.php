@@ -1,9 +1,9 @@
 @extends('admin.layout') @section('content')
 <div class="page-head"><div><span>GARASI</span><h2>Mobil Keluar / Masuk</h2><p>Satu baris = satu perjalanan. Status invoice &amp; payment bisa diubah langsung dari tabel.</p></div><a class="btn" href="{{ route('admin.movements.create') }}">+ Catat Mobil Keluar/Masuk</a></div>
 <form class="scan-box" method="GET" action="{{ route('admin.movements.scan') }}">
-<input name="code" id="scan" autocomplete="off" placeholder="Scan barcode / ketik nopol, lalu Enter">
+<input name="code" id="scan" autocomplete="off" placeholder="Ketik nopol">
 <button class="btn">Cari Armada</button><button type="button" class="btn secondary" id="camBtn" style="display:none">📷 Kamera</button>
-<small>Pemindai barcode USB bekerja seperti keyboard — arahkan kursor ke kolom ini lalu scan. Hasilnya membuka form catatan dengan nopol terisi.</small></form>
+<small>Ketik nopol lalu klik Cari Armada — form catatan akan terbuka dengan nopol terisi.</small></form>
 <video id="camVideo" playsinline style="display:none;width:100%;max-width:420px;border-radius:14px;margin-bottom:16px"></video>
 <div class="unit-grid">@foreach($vehicles as $v)<a class="unit-card {{ $v->is_out?'is-out':'' }}" href="{{ route('admin.movements.create',['vehicle'=>$v->id]) }}"><span class="plate">{{ $v->plate_nb }}</span><small>{{ $v->label }}</small>@if($v->is_out)<span class="status out">Keluar · {{ optional($v->last_moved_at)->format('d M') }}</span>@else<span class="status in">Di garasi</span>@endif</a>@endforeach</div>
 <div class="filter-tabs"><a href="{{ route('admin.movements.index') }}" class="{{ !$f?'on':'' }}">Semua <b>{{ $counts['all'] }}</b></a><a href="{{ route('admin.movements.index',['f'=>'out']) }}" class="{{ $f==='out'?'on':'' }}">Belum masuk <b>{{ $counts['out'] }}</b></a><a href="{{ route('admin.movements.index',['f'=>'unpaid']) }}" class="{{ $f==='unpaid'?'on':'' }}">Belum payment <b>{{ $counts['unpaid'] }}</b></a><a href="{{ route('admin.movements.index',['f'=>'noinvoice']) }}" class="{{ $f==='noinvoice'?'on':'' }}">Invoice belum terkirim <b>{{ $counts['noinvoice'] }}</b></a></div>

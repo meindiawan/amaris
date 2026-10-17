@@ -14,7 +14,7 @@ class DriverController extends Controller
         $q = trim((string) $r->query('q'));
         $drivers = Driver::when($q !== '', fn ($x) => $x->where(fn ($w) => $w->where('name', 'like', "%$q%")->orWhere('phone', 'like', "%$q%")))
             ->orderByDesc('is_active')->orderBy('name')->get();
-        $busy = Booking::whereIn('status', Booking::BLOCKING)->whereNotNull('driver_id')->where('end_at', '>=', now())->get()->groupBy('driver_id');
+        $busy = Booking::whereIn('status', Booking::ASSIGNING)->whereNotNull('driver_id')->where('end_at', '>=', now())->get()->groupBy('driver_id');
         return view('admin.drivers.index', compact('drivers', 'q', 'busy'));
     }
     public function create() { return view('admin.drivers.form', ['driver' => new Driver(['is_active' => true])]); }

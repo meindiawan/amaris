@@ -10,7 +10,7 @@
 </head><body>
 <header class="navbar scrolled" id="navbar"><div class="container nav-inner"><a class="brand" href="{{ url('/') }}"><img src="{{ asset('images/logo-amaris.png') }}" alt="Amaris Ren Car"></a>
 <button class="menu-toggle" id="menuToggle" aria-label="Buka menu"><span></span><span></span><span></span></button>
-<nav class="nav-links" id="navLinks"><a href="{{ url('/') }}">Beranda</a><a href="{{ url('/#armada') }}">Armada</a><a href="{{ url('/galeri') }}" class="{{ request()->is('galeri') ? 'is-on' : '' }}">Galeri</a><a href="{{ url('/artikel') }}" class="{{ request()->is('artikel*') ? 'is-on' : '' }}">Artikel</a><a href="{{ url('/#faq') }}">FAQ</a><a class="nav-cta" href="{{ url('/#armada') }}">Pilih Mobil <span>↗</span></a></nav></div></header>
+<nav class="nav-links" id="navLinks"><a href="{{ url('/') }}">Beranda</a><a href="{{ url('/#armada') }}">Armada</a><a href="{{ url('/galeri') }}" class="{{ request()->is('galeri') ? 'is-on' : '' }}">Galeri</a><a href="{{ url('/artikel') }}" class="{{ request()->is('artikel*') ? 'is-on' : '' }}">Artikel</a><a class="nav-cta" href="{{ url('/#armada') }}">Pilih Mobil <span>↗</span></a></nav></div></header>
 <main class="page-main">@yield('content')</main>
 <footer class="footer"><div class="container"><div class="footer-bottom"><span>© {{ date('Y') }} Amaris Ren Car. All rights reserved.</span><span>Rental Mobil • Comfort • Care • Journey</span></div></div></footer>
 @include('partials.contact-float')

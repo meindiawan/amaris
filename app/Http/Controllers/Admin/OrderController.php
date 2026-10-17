@@ -65,7 +65,7 @@ class OrderController extends Controller
 
     private function formData(Booking $b): array
     {
-        $busy = Booking::whereIn('status', Booking::BLOCKING)->where('end_at', '>=', now()->subDay())
+        $busy = Booking::whereIn('status', Booking::ASSIGNING)->where('end_at', '>=', now()->subDay())
             ->where(fn ($q) => $q->whereNotNull('vehicle_id')->orWhereNotNull('driver_id'))
             ->when($b->exists, fn ($q) => $q->where('id', '!=', $b->id))
             ->get(['vehicle_id', 'driver_id', 'start_at', 'end_at', 'code'])

@@ -87,3 +87,28 @@
 .hero-slide.hero-fallback{background-color:#201735;background-image:linear-gradient(115deg,rgba(32,23,53,.80) 0%,rgba(52,36,80,.70) 55%,rgba(75,53,95,.60) 100%),url('https://images.unsplash.com/photo-1560996667-33386f60e00b?auto=format&fit=crop&w=2000&q=80'),url('../images/galeri/amaris-15.jpg');background-size:cover,cover,cover;background-position:center,center 60%,center;background-repeat:no-repeat}
 .hero-overlay{background:linear-gradient(90deg,rgba(19,13,32,.55) 0%,rgba(19,13,32,.25) 60%,rgba(19,13,32,.1) 100%)!important}
 .hero-content{justify-content:flex-start}
+
+/* DAFTAR HARGA */
+.harga{background:#fff}
+.harga-intro{color:var(--muted);max-width:560px;line-height:1.7;font-size:14px;margin:12px 0 0}
+.harga-card{border:1px solid var(--line);border-radius:22px;overflow:hidden;background:#fff;box-shadow:0 14px 40px rgba(33,23,53,.06)}
+.harga-table{width:100%;border-collapse:collapse}
+.harga-table th{background:var(--ink);color:#fff;font:800 11px 'DM Sans',sans-serif;letter-spacing:.12em;text-transform:uppercase;text-align:left;padding:16px 24px}
+.harga-table th:last-child,.harga-table td:last-child{text-align:right}
+.harga-table td{padding:16px 24px;font-size:14px;color:#6c6572;border-top:1px solid var(--line)}
+.harga-table tbody tr:nth-child(even){background:#faf7f2}
+.harga-table tbody tr:hover{background:#fff5e8}
+.harga-table td strong{font:800 15px 'Manrope',sans-serif;color:var(--ink)}
+.hg-price{font:800 16px 'Manrope',sans-serif;color:var(--ink);white-space:nowrap}
+.hg-contact{display:inline-block;background:var(--orange);color:#fff;font:800 12px 'DM Sans',sans-serif;padding:8px 16px;border-radius:99px;transition:.15s}
+.hg-contact:hover{background:#ff8c21;transform:translateY(-1px)}
+.harga-note{margin:14px 4px 0;font-size:12px;color:#8c8590}
+@media(max-width:700px){
+ .harga-table thead{display:none}
+ .harga-table,.harga-table tbody,.harga-table tr,.harga-table td{display:block;width:100%}
+ .harga-table tr{padding:14px 18px;border-top:1px solid var(--line)}.harga-table tbody tr:first-child{border-top:0}
+ .harga-table td{border:0;padding:2px 0;text-align:left!important}
+ .harga-table td[data-l="Paket"]{font-size:12px;color:#8c8590}
+ .harga-table td[data-l="Harga"]{margin-top:8px}
+}
+.harga{scroll-margin-top:84px}

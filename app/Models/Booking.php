@@ -25,6 +25,8 @@ class Booking extends Model
     ];
     /** Status yang mengunci jadwal mobil. */
     public const BLOCKING = ['confirmed', 'ongoing'];
+    /** Booking yang sudah memegang unit/supir (termasuk yang masih Baru/Menunggu) — dipakai untuk mencegah unit & supir bentrok. */
+    public const ASSIGNING = ['pending', 'confirmed', 'ongoing'];
 
     public function car() { return $this->belongsTo(Car::class); }
 
@@ -69,16 +71,16 @@ class Booking extends Model
     public function invoice() { return $this->hasOne(Invoice::class)->latestOfMany(); }
     public function movements() { return $this->hasMany(VehicleMovement::class)->orderByDesc('moved_at'); }
 
-    /** Booking lain (confirmed/ongoing) yang memakai unit yang sama pada rentang waktu tertentu. */
+    /** Booking lain (baru/confirmed/ongoing) yang memakai unit yang sama pada rentang waktu tertentu. */
     public static function vehicleConflicts(int $vehicleId, $start, $end, ?int $exceptId = null)
     {
-        return self::where('vehicle_id', $vehicleId)->whereIn('status', self::BLOCKING)
+        return self::where('vehicle_id', $vehicleId)->whereIn('status', self::ASSIGNING)
             ->when($exceptId, fn ($q) => $q->where('id', '!=', $exceptId))
             ->where('start_at', '<', $end)->where('end_at', '>', $start);
     }
     public static function driverConflicts(int $driverId, $start, $end, ?int $exceptId = null)
     {
-        return self::where('driver_id', $driverId)->whereIn('status', self::BLOCKING)
+        return self::where('driver_id', $driverId)->whereIn('status', self::ASSIGNING)
             ->when($exceptId, fn ($q) => $q->where('id', '!=', $exceptId))
             ->where('start_at', '<', $end)->where('end_at', '>', $start);
     }

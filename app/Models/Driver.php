@@ -30,7 +30,7 @@ class Driver extends Model
             ->reject(fn (self $d) => $d->isBusy(now(), now()))->values();
     }
 
-    /** Supir yang tidak dipakai booking lain (confirmed/ongoing) pada rentang waktu itu. */
+    /** Supir yang tidak dipakai booking lain (baru/confirmed/ongoing) pada rentang waktu itu. */
     public function isBusy($start, $end, ?int $exceptBookingId = null): bool
     {
         return Booking::driverConflicts($this->id, $start, $end, $exceptBookingId)->exists();

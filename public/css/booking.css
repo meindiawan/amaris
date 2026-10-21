@@ -40,3 +40,14 @@ label.addr{margin-top:12px}[hidden]{display:none!important}
 .success-card .hint{margin:14px 0 24px}
 @media(max-width:980px){.booking-layout{grid-template-columns:1fr}.booking-summary{position:static}.opt-grid.three{grid-template-columns:1fr}}
 @media(max-width:640px){.booking-section{padding:46px 0 60px}.bcard{padding:20px 16px}.fgrid,.opt-grid.two,.sum-list{grid-template-columns:1fr}.success-card{padding:32px 20px}.detail-cta .btn{flex:1 1 100%}}
+
+/* Tombol Chat Admin (WhatsApp) — halaman detail mobil tidak memuat pages.css, jadi gayanya disertakan di sini */
+.bi{width:1em;height:1em;display:block;flex:none}
+.contact-float{position:fixed;z-index:60;right:22px;bottom:22px;display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+.cf-btn{display:flex;align-items:center;gap:10px;color:#fff;border-radius:99px;padding:8px 18px 8px 8px;font:800 12px 'DM Sans',sans-serif;box-shadow:0 12px 28px rgba(0,0,0,.22);transition:transform .18s,box-shadow .18s;position:relative}
+.cf-btn:hover{transform:translateY(-3px);box-shadow:0 16px 34px rgba(0,0,0,.28)}
+.cf-btn .bi{width:38px;height:38px;padding:9px;border-radius:50%;background:#fff;box-sizing:border-box}
+.cf-wa{background:#25d366}.cf-wa .bi{color:#25d366}
+.cf-fb{background:#1877f2}.cf-fb .bi{color:#1877f2}
+@media(max-width:760px){.contact-float{right:14px;bottom:14px}.cf-btn{padding:6px}.cf-text{display:none}}
+.bcard .agree{margin-top:0}

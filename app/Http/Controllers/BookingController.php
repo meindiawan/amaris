@@ -28,6 +28,10 @@ class BookingController extends Controller
             'pickup_address' => 'required_if:pickup_method,delivery|nullable|string|max:500',
             'return_method'  => 'required|in:office,pickup',
             'return_address' => 'required_if:return_method,pickup|nullable|string|max:500',
+            'booker_name'    => 'required|string|max:150',
+            'guest_same'     => 'nullable|boolean',
+            'guest_name'     => 'nullable|string|max:120|required_without:guest_same',
+            'phone'          => ['required', 'string', 'max:20', 'regex:/^\+?[0-9][0-9\s\-()]{7,19}$/'],
             'destination'    => 'nullable|string|max:200',
             'passengers'     => 'nullable|integer|min:1|max:30',
             'notes'          => 'nullable|string|max:1000',
@@ -41,7 +45,16 @@ class BookingController extends Controller
             'end_time.required'       => 'Jam kembali wajib diisi.',
             'pickup_address.required_if' => 'Alamat pengantaran mobil wajib diisi.',
             'return_address.required_if' => 'Alamat penjemputan mobil wajib diisi.',
+            'booker_name.required'    => 'Nama pemboking wajib diisi.',
+            'guest_name.required_without' => 'Nama tamu wajib diisi (atau centang "sama dengan pemboking").',
+            'phone.required'          => 'Nomor WhatsApp wajib diisi.',
+            'phone.regex'             => 'Nomor WhatsApp tidak valid. Gunakan angka, mis. 08123456789.',
         ]);
+
+        $booker = trim($d['booker_name']);
+        $sameGuest = !empty($d['guest_same']) || trim((string) ($d['guest_name'] ?? '')) === '';
+        $guest = $sameGuest ? $booker : trim($d['guest_name']);
+        $phone = trim($d['phone']);
 
         $start = Carbon::parse($d['start_date'].' '.$d['start_time']);
         $end   = Carbon::parse($d['end_date'].' '.$d['end_time']);
@@ -69,14 +82,16 @@ class BookingController extends Controller
             'service_type' => $d['service_type'], 'start_at' => $start, 'end_at' => $end, 'days' => $days,
             'pickup_method' => $d['pickup_method'], 'pickup_address' => $d['pickup_method'] === 'delivery' ? $d['pickup_address'] : null,
             'return_method' => $d['return_method'], 'return_address' => $d['return_method'] === 'pickup' ? $d['return_address'] : null,
-            // Data penyewa tidak diisi di formulir — dilengkapi admin lewat chat WhatsApp.
-            'customer_name' => Booking::WEB_NAME, 'phone' => '-', 'email' => null, 'nik' => '-', 'address' => '-', 'sim_number' => null,
+            // Pemboking (bisa ajudan), nama tamu & nomor WA dari formulir. KTP/SIM dilengkapi admin lewat WhatsApp.
+            'customer_name' => $booker, 'order_name' => $booker, 'guest_name' => $guest, 'phone' => $phone,
+            'guest_phone' => $sameGuest ? $phone : null,
+            'email' => null, 'nik' => '-', 'address' => '-', 'sim_number' => null,
             'destination' => $d['destination'] ?? null, 'passengers' => $d['passengers'] ?? null, 'notes' => $d['notes'] ?? null,
             'price_per_day' => $car->price, 'service_fee_per_day' => $feePerDay, 'delivery_fee' => $delivery,
             'total_estimate' => $total, 'status' => 'pending',
         ]);
 
-        // Booking hanya lewat WhatsApp: data tersimpan di sistem, lalu pelanggan langsung diarahkan ke WA admin.
+        // Data tersimpan di sistem, lalu pelanggan langsung diarahkan ke WA admin.
         return redirect()->away($this->whatsappUrl($booking, $car, $d));
     }
 
@@ -88,6 +103,9 @@ class BookingController extends Controller
             'Halo Amaris Rent Car, saya ingin booking mobil:',
             '',
             'Kode booking : '.$b->code,
+            'Nama pemboking : '.$b->customer_name,
+            'Nama tamu : '.$b->guest_name,
+            'No. WhatsApp : '.$b->phone,
             'Mobil : '.$car->name,
             'Paket : '.$b->service_label,
             'Ambil : '.$b->start_at->translatedFormat('d M Y').' jam '.$b->start_at->format('H:i'),
@@ -98,7 +116,7 @@ class BookingController extends Controller
         if (!empty($d['destination'])) $lines[] = 'Tujuan : '.$d['destination'];
         if (!empty($d['passengers'])) $lines[] = 'Penumpang : '.$d['passengers'].' orang';
         if (!empty($d['notes'])) $lines[] = 'Catatan : '.$d['notes'];
-        array_push($lines, '', 'Estimasi total : '.$rp($b->total_estimate), '', 'Mohon konfirmasinya, data penyewa (nama, KTP, SIM) akan saya kirim di chat ini. Terima kasih.');
+        array_push($lines, '', 'Estimasi total : '.$rp($b->total_estimate));
 
         $wa = \App\Support\Fmt::waNumber(\App\Support\Fmt::setting('whatsapp', '6285157024883'));
         return 'https://wa.me/'.$wa.'?text='.rawurlencode(implode("\n", $lines));

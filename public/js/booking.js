@@ -45,6 +45,12 @@
     $('sumTotal').textContent = rp(d1 * (price + fee) + deliv);
   };
 
+  // Nama tamu: otomatis sama dengan pemboking kecuali dicentang lain
+  const same = $('guestSame'), guest = $('guestName');
+  const toggleGuest = () => { if (!same) return; $('guestWrap').hidden = same.checked; guest.required = !same.checked; };
+  if (same) same.addEventListener('change', () => { toggleGuest(); if (!same.checked) guest.focus(); });
+  toggleGuest();
+
   if (el.sd.value) el.ed.min = el.sd.value;
   el.sd.addEventListener('change', () => { el.ed.min = el.sd.value || today; if (el.ed.value && el.ed.value < el.sd.value) el.ed.value = el.sd.value; calc(); });
   form.addEventListener('change', () => { toggleAddr(); calc(); });

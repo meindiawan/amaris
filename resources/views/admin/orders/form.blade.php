@@ -10,7 +10,7 @@
 
 @if($isWeb)
 <div class="form-card"><h3>Data dari formulir website</h3><dl class="dl">
- <div><dt>Mobil dipesan</dt><dd>{{ $order->car_name }} · {{ $order->service_label }}</dd></div>@if($order->customer_name !== \App\Models\Booking::WEB_NAME)<div><dt>Penyewa</dt><dd>{{ $order->customer_name }} · {{ $order->phone }}</dd></div>@endif
+ <div><dt>Mobil dipesan</dt><dd>{{ $order->car_name }} · {{ $order->service_label }}</dd></div>@if($order->customer_name !== \App\Models\Booking::WEB_NAME)<div><dt>Pemboking</dt><dd>{{ $order->customer_name }} · {{ $order->phone }}</dd></div>@endif @if($order->guest_name)<div><dt>Nama tamu</dt><dd>{{ $order->guest_name }}</dd></div>@endif
  @if($order->nik && $order->nik !== '-')<div><dt>NIK</dt><dd>{{ $order->nik }}</dd></div>@endif<div><dt>Estimasi</dt><dd>{{ $rp($order->total_estimate) }} ({{ $order->days }} hari)</dd></div>
  <div class="wide"><dt>Serah terima / pengembalian</dt><dd>{{ $order->pickup_label }} · {{ $order->return_label }}</dd></div>
  @if($order->address && $order->address !== '-')<div class="wide"><dt>Alamat penyewa</dt><dd>{{ $order->address }}</dd></div>@endif
@@ -21,9 +21,10 @@
 <h3>Booking Order</h3>
 <div class="inline-form">
  <label class="full">Booking order (nama pemesan / instansi)<input name="order_name" value="{{ old('order_name',$order->order_name ?: $order->customer_name) }}" placeholder="Bp Dwi Polda" required></label>
+ <label class="full">WA pemesan (order by)<input name="phone" value="{{ old('phone', $order->phoneLabel()) }}" placeholder="08xxxxxxxxxx"></label>
  <label>Tanggal mulai<input type="date" name="start_date" id="sd" value="{{ $sd }}" required></label>
  <label>Jam mulai<input type="time" name="start_time" id="st" value="{{ $st }}" required></label>
- <label>Tanggal selesai<input type="date" name="end_date" id="ed" value="{{ $ed }}" required></label>
+ <label>Tanggal selesai<input type="date" name="end_date" id="ed" value="{{ $ed }}" min="{{ $sd }}" required></label>
  <label>Jam selesai<input type="time" name="end_time" id="et" value="{{ $et }}" required></label>
  <label>Unit / armada (nopol)<select name="vehicle_id" id="selV"><option value="">— pilih armada —</option>@foreach($vehicles->sortByDesc(fn($v)=>$order->car_id && $v->car_id==$order->car_id) as $v)<option value="{{ $v->id }}" data-label="{{ $v->plate_number }} · {{ $v->label }}" @selected(old('vehicle_id',$order->vehicle_id)==$v->id)>{{ $v->plate_number }} · {{ $v->label }}{{ $order->car_id && $v->car_id==$order->car_id?' ★':'' }}</option>@endforeach</select></label>
  <label>Driver<select name="driver_id" id="selD"><option value="">— tanpa supir —</option>@foreach($drivers as $d)<option value="{{ $d->id }}" data-label="{{ $d->name }} · {{ $d->phone }}" @selected(old('driver_id',$order->driver_id)==$d->id)>{{ $d->name }} · {{ $d->phone }}</option>@endforeach</select></label>
@@ -58,6 +59,9 @@
  function run(){var a=mark(g('selV'),'v'),b=filterDrivers(),note=g('availNote');
   note.hidden=false;note.textContent='Armada yang sedang dipakai booking lain tidak bisa dipilih ('+a+' armada sibuk). Supir yang sudah ditugaskan pada tanggal ini tidak ditampilkan ('+b+' supir disembunyikan).';}
  g('selD').addEventListener('change',function(){drvSel=this.value;});
+ // Tanggal selesai tidak boleh sebelum tanggal mulai
+ function syncEnd(){var s=g('sd').value;if(s){g('ed').min=s;if(g('ed').value&&g('ed').value<s)g('ed').value=s;}}
+ g('sd').addEventListener('change',syncEnd);syncEnd();
  ['sd','st','ed','et'].forEach(function(i){g(i).addEventListener('change',run);});run();
 })();
 </script>

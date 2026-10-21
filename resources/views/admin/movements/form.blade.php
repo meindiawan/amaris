@@ -7,8 +7,8 @@
 <label>Nopol<input name="plate_number" value="{{ old('plate_number',$vehicleKey==='other'?$log->plate_number:'') }}" placeholder="H 1234 AB" autocomplete="off"></label>
 <label>Jenis kendaraan<input name="vehicle_type" value="{{ old('vehicle_type',$vehicleKey==='other'?$log->vehicle_type:'') }}" placeholder="Innova Zenix"></label>
 <label class="full">Rental<input name="rental_name" value="{{ old('rental_name',$vehicleKey==='other'?$log->rental_name:'') }}" placeholder="Nama rental pemilik mobil"></label></div></div>
-<label>Tanggal keluar<input type="date" name="out_date" value="{{ old('out_date',optional($log->out_date)->format('Y-m-d')) }}" required></label>
-<label>Tanggal masuk<input type="date" name="in_date" value="{{ old('in_date',optional($log->in_date)->format('Y-m-d')) }}"><small>Kosongkan bila mobil belum kembali.</small></label>
+<label>Tanggal keluar<input type="date" name="out_date" id="outDate" value="{{ old('out_date',optional($log->out_date)->format('Y-m-d')) }}" required></label>
+<label>Tanggal masuk<input type="date" name="in_date" id="inDate" value="{{ old('in_date',optional($log->in_date)->format('Y-m-d')) }}"><small>Kosongkan bila mobil belum kembali.</small></label>
 <label class="full">User yang booking<input name="booker_name" list="bookers" value="{{ old('booker_name',$log->booker_name) }}" placeholder="Nama pemesan" autocomplete="off"><datalist id="bookers">@foreach($bookers as $n)<option value="{{ $n }}">@endforeach</datalist></label>
 <label>Invoice<select name="invoice_status">@foreach(\App\Models\VehicleLog::INVOICE as $k=>$l)<option value="{{ $k }}" @selected(old('invoice_status',$log->invoice_status)===$k)>{{ $l }}</option>@endforeach</select></label>
 <label>Payment<select name="payment_status" id="pstat">@foreach(\App\Models\VehicleLog::PAYMENT as $k=>$l)<option value="{{ $k }}" @selected(old('payment_status',$log->payment_status)===$k)>{{ $l }}</option>@endforeach</select></label>
@@ -19,6 +19,13 @@
 </div>
 <div class="form-actions"><a class="btn secondary" href="{{ route('admin.movements.index') }}">Batal</a><button class="btn">Simpan Catatan →</button></div></form>
 <script>
+(function(){
+var od=document.getElementById('outDate'),idt=document.getElementById('inDate');
+// Tanggal masuk tidak boleh lebih awal dari tanggal keluar
+function chk(){var o=od.value;idt.min=o||'';idt.setCustomValidity(o&&idt.value&&idt.value<o?'Tanggal masuk tidak boleh sebelum tanggal keluar.':'');}
+od.addEventListener('change',function(){if(idt.value&&idt.value<od.value)idt.value=od.value;chk();});
+idt.addEventListener('change',chk);idt.addEventListener('input',chk);chk();
+})();
 (function(){function t(){document.getElementById('otherVeh').hidden=document.getElementById('vkey').value!=='other';
 document.getElementById('pnoteBox').hidden=document.getElementById('pstat').value!=='sudah';
 document.getElementById('dnameBox').hidden=document.getElementById('dkey').value!=='other';}

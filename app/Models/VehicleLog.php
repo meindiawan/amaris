@@ -14,6 +14,12 @@ class VehicleLog extends Model
 
     protected static function booted(): void
     {
+        // Pengaman terakhir: tanggal masuk tidak boleh lebih awal dari tanggal keluar, dari form mana pun.
+        static::saving(function (self $l) {
+            if ($l->in_date && $l->out_date && $l->in_date->lt($l->out_date)) {
+                throw \Illuminate\Validation\ValidationException::withMessages(['in_date' => 'Tanggal masuk tidak boleh sebelum tanggal keluar.']);
+            }
+        });
         static::saved(function (self $l) {
             $l->syncVehicle($l->vehicle_id);
             if ($l->wasChanged('vehicle_id') && $l->getOriginal('vehicle_id')) $l->syncVehicle($l->getOriginal('vehicle_id'));

@@ -54,6 +54,16 @@
     <label class="full addr" id="returnWrap" {{ $rm==='pickup'?'':'hidden' }}>Alamat penjemputan<textarea name="return_address" id="returnAddr" rows="2" placeholder="Alamat lengkap + patokan">{{ old('return_address') }}</textarea></label>
    </fieldset>
 
+   <fieldset class="bcard"><legend><span>4</span> Data pemesan</legend>
+    <div class="fgrid">
+     <label class="full">Nama pemboking<input type="text" name="booker_name" id="bookerName" value="{{ old('booker_name') }}" maxlength="150" autocomplete="name" placeholder="Nama yang memesan (mis. ajudan / sekretaris / pribadi)" required></label>
+     <label class="agree full"><input type="checkbox" name="guest_same" id="guestSame" value="1" {{ old('guest_same', old('booker_name') === null ? '1' : (old('guest_name') ? '' : '1')) ? 'checked' : '' }}><span>Nama tamu sama dengan nama pemboking</span></label>
+     <label class="full" id="guestWrap" hidden>Nama tamu<input type="text" name="guest_name" id="guestName" value="{{ old('guest_name') }}" maxlength="120" placeholder="Nama tamu / penumpang yang memakai mobil"></label>
+     <label class="full">Nomor WhatsApp<input type="tel" name="phone" id="phone" value="{{ old('phone') }}" maxlength="20" inputmode="tel" autocomplete="tel" placeholder="08xxxxxxxxxx" required></label>
+    </div>
+    <p class="hint">Bila pemesan adalah ajudan / sekretaris, isi nama atasan sebagai nama tamu. Admin akan menghubungi nomor WhatsApp di atas.</p>
+   </fieldset>
+
   </div>
 
   <aside class="booking-summary"><div class="sum-card">
@@ -64,7 +74,7 @@
    <div class="srow" id="sumDelivRow" hidden><span>Antar / jemput</span><b id="sumDeliv"></b></div>
    <div class="stotal"><span>Estimasi total</span><strong id="sumTotal">{{ $rp($car->price) }}</strong></div>
    <button class="btn btn-primary" type="submit" id="submitBtn">Booking via WhatsApp →</button>
-   <small class="sum-note">Ini hanya estimasi. Biaya final (deposit, kelebihan jam, BBM, tol, dll) dikonfirmasi admin sebelum serah terima. Data penyewa diisi langsung lewat chat WhatsApp. Dengan menekan tombol, Anda menyetujui syarat &amp; ketentuan sewa. <em>{{ $settings['terms'] ?? '' }}</em></small>
+   <small class="sum-note">Ini hanya estimasi. Biaya final (deposit, kelebihan jam, BBM, tol, dll) dikonfirmasi admin sebelum serah terima. Dengan menekan tombol, Anda menyetujui syarat &amp; ketentuan sewa. <em>{{ $settings['terms'] ?? '' }}</em></small>
   </div></aside>
  </form>
  @endif

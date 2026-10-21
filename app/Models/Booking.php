@@ -38,6 +38,13 @@ class Booking extends Model
     public function getPickupLabelAttribute(): string { return $this->pickup_method === 'delivery' ? 'Diantar ke: '.$this->pickup_address : 'Ambil di kantor'; }
     public function getReturnLabelAttribute(): string { return $this->return_method === 'pickup' ? 'Dijemput di: '.$this->return_address : 'Kembalikan ke kantor'; }
 
+    /** Nomor WA pemesan untuk ditampilkan; kosong bila belum diisi. */
+    public function phoneLabel(): string
+    {
+        $p = trim((string) $this->phone);
+        return strlen(preg_replace('/\D+/', '', $p)) >= 9 ? $p : '';
+    }
+
     /** Nomor WhatsApp pelanggan dalam format internasional (62…). */
     public function getWaPhoneAttribute(): string
     {
@@ -144,6 +151,7 @@ class Booking extends Model
 
         return implode("\n", [
             'Booking order : '.($this->order_name ?: $this->customer_name),
+            'WA pemesan : '.$this->phoneLabel(),
             '',
             $this->orderDateLabel(),
             '',

@@ -42,9 +42,10 @@ class OrderController extends Controller
         $v = !empty($d['vehicle_id']) ? Vehicle::find($d['vehicle_id']) : null;
         $d += [
             'code' => Booking::makeCode(), 'car_id' => $v?->car_id, 'car_name' => $v?->label ?: 'Booking Order',
-            'service_type' => 'with_driver', 'customer_name' => $d['order_name'], 'phone' => $d['guest_phone'] ?: '-',
+            'service_type' => 'with_driver', 'customer_name' => $d['order_name'],
             'nik' => '-', 'address' => '-', 'pickup_method' => 'office', 'return_method' => 'office',
         ];
+        $d['phone'] = trim((string) ($d['phone'] ?? '')) ?: ($d['guest_phone'] ?: '-');
         $b = Booking::create($d);
         return redirect()->route('admin.orders.index')->with('ok', 'Booking Order '.$b->code.' dibuat.');
     }
@@ -53,6 +54,7 @@ class OrderController extends Controller
     {
         $d = $this->validated($r, $order);
         if (!empty($d['vehicle_id']) && ($v = Vehicle::find($d['vehicle_id'])) && $v->car_id && !$order->car_id) $d['car_id'] = $v->car_id;
+        $d['phone'] = trim((string) ($d['phone'] ?? '')) ?: '-';
         $order->update($d);
         return redirect()->route('admin.orders.index')->with('ok', 'Booking Order '.$order->code.' disimpan.');
     }
@@ -84,7 +86,7 @@ class OrderController extends Controller
             'start_date' => 'required|date', 'start_time' => 'required|date_format:H:i', 'end_date' => 'required|date|after_or_equal:start_date', 'end_time' => 'required|date_format:H:i',
             'vehicle_id' => 'nullable|exists:vehicles,id', 'driver_id' => 'nullable|exists:drivers,id',
             'pelayanan' => 'nullable|max:150', 'giat' => 'nullable|max:150', 'standby_location' => 'nullable|max:200', 'standby_time' => 'nullable|max:30',
-            'destination' => 'nullable|max:200', 'guest_name' => 'nullable|max:120', 'guest_phone' => 'nullable|max:30',
+            'phone' => 'nullable|max:30', 'destination' => 'nullable|max:200', 'guest_name' => 'nullable|max:120', 'guest_phone' => 'nullable|max:30',
             'status' => 'required|in:'.implode(',', array_keys(Booking::STATUSES)), 'admin_notes' => 'nullable|max:2000',
         ], ['order_name.required' => 'Nama pada Booking Order wajib diisi.', 'end_date.after_or_equal' => 'Tanggal selesai tidak boleh sebelum tanggal mulai.']);
 

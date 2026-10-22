@@ -56,12 +56,10 @@
 
    <fieldset class="bcard"><legend><span>4</span> Data pemesan</legend>
     <div class="fgrid">
-     <label class="full">Nama pemboking<input type="text" name="booker_name" id="bookerName" value="{{ old('booker_name') }}" maxlength="150" autocomplete="name" placeholder="Nama yang memesan (mis. ajudan / sekretaris / pribadi)" required></label>
-     <label class="agree full"><input type="checkbox" name="guest_same" id="guestSame" value="1" {{ old('guest_same', old('booker_name') === null ? '1' : (old('guest_name') ? '' : '1')) ? 'checked' : '' }}><span>Nama tamu sama dengan nama pemboking</span></label>
-     <label class="full" id="guestWrap" hidden>Nama tamu<input type="text" name="guest_name" id="guestName" value="{{ old('guest_name') }}" maxlength="120" placeholder="Nama tamu / penumpang yang memakai mobil"></label>
-     <label class="full">Nomor WhatsApp<input type="tel" name="phone" id="phone" value="{{ old('phone') }}" maxlength="20" inputmode="tel" autocomplete="tel" placeholder="08xxxxxxxxxx" required></label>
+     <label class="full">Nama pemboking<input type="text" name="booker_name" id="bookerName" value="{{ old('booker_name') }}" maxlength="150" autocomplete="name" required></label>
+     <label class="full">Nama tamu<input type="text" name="guest_name" id="guestName" value="{{ old('guest_name') }}" maxlength="120" required></label>
+     <label class="full">Nomor WhatsApp<input type="tel" name="phone" id="phone" value="{{ old('phone') }}" maxlength="20" inputmode="tel" autocomplete="tel" required></label>
     </div>
-    <p class="hint">Bila pemesan adalah ajudan / sekretaris, isi nama atasan sebagai nama tamu. Admin akan menghubungi nomor WhatsApp di atas.</p>
    </fieldset>
 
   </div>

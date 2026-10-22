@@ -29,8 +29,7 @@ class BookingController extends Controller
             'return_method'  => 'required|in:office,pickup',
             'return_address' => 'required_if:return_method,pickup|nullable|string|max:500',
             'booker_name'    => 'required|string|max:150',
-            'guest_same'     => 'nullable|boolean',
-            'guest_name'     => 'nullable|string|max:120|required_without:guest_same',
+            'guest_name'     => 'required|string|max:120',
             'phone'          => ['required', 'string', 'max:20', 'regex:/^\+?[0-9][0-9\s\-()]{7,19}$/'],
             'destination'    => 'nullable|string|max:200',
             'passengers'     => 'nullable|integer|min:1|max:30',
@@ -46,14 +45,14 @@ class BookingController extends Controller
             'pickup_address.required_if' => 'Alamat pengantaran mobil wajib diisi.',
             'return_address.required_if' => 'Alamat penjemputan mobil wajib diisi.',
             'booker_name.required'    => 'Nama pemboking wajib diisi.',
-            'guest_name.required_without' => 'Nama tamu wajib diisi (atau centang "sama dengan pemboking").',
+            'guest_name.required' => 'Nama tamu wajib diisi.',
             'phone.required'          => 'Nomor WhatsApp wajib diisi.',
             'phone.regex'             => 'Nomor WhatsApp tidak valid. Gunakan angka, mis. 08123456789.',
         ]);
 
         $booker = trim($d['booker_name']);
-        $sameGuest = !empty($d['guest_same']) || trim((string) ($d['guest_name'] ?? '')) === '';
-        $guest = $sameGuest ? $booker : trim($d['guest_name']);
+        $guest = trim($d['guest_name']);
+        $sameGuest = mb_strtolower($guest) === mb_strtolower($booker);
         $phone = trim($d['phone']);
 
         $start = Carbon::parse($d['start_date'].' '.$d['start_time']);
